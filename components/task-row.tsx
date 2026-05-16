@@ -70,10 +70,12 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
     >
       <motion.div
         layout
-        className={`rounded-xl transition-all duration-300 relative overflow-hidden border ${activeBorder} bg-card/40 ${
+        className={`rounded-xl transition-all duration-300 relative overflow-hidden border border-transparent bg-card/40 ${
+          task.status !== "done" ? activeShadow : "shadow-sm"
+        } ${
           isHovering || isExpanded || isMenuOpen
-            ? `glass shadow-lg ${activeShadow}/20 ring-1 ring-[rgba(120,112,100,0.1)]`
-            : "shadow-sm"
+            ? "glass ring-1 ring-[rgba(120,112,100,0.1)]"
+            : ""
         }`}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
