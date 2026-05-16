@@ -24,7 +24,7 @@ interface TaskRowProps {
 }
 
 export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggleSelect }: TaskRowProps) {
-  const { updateStatus, updateTask, deleteTask } = useTasks()
+  const { updateStatus, updateTask, deleteTask, settings } = useTasks()
   const [isExpanded, setIsExpanded] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)

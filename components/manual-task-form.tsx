@@ -28,7 +28,7 @@ interface ManualTaskFormProps {
 }
 
 export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
-  const { addTask } = useTasks()
+  const { addTask, settings } = useTasks()
   
   const [title, setTitle] = useState("")
   const [dueDate, setDueDate] = useState<Date | undefined>(undefined)
