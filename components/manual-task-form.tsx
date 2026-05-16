@@ -35,6 +35,7 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
   const [dueTime, setDueTime] = useState("")
   const [priority, setPriority] = useState<Priority>("medium")
   const [quadrant, setQuadrant] = useState<Quadrant>(null)
+  const [recurringPattern, setRecurringPattern] = useState<"daily" | "weekly" | "monthly" | null>(null)
   const [tags, setTags] = useState<string[]>([])
   const [newTag, setNewTag] = useState("")
   const [description, setDescription] = useState("")
@@ -60,6 +61,7 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
       priority,
       status: "todo",
       quadrant,
+      recurringPattern,
       subtasks: [],
       tags,
       notes: "",
@@ -67,7 +69,6 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
       links,
       timeEstimate,
       reminder: null,
-      recurringPattern: null,
     })
 
     // Reset form
@@ -81,6 +82,7 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
     setDescription("")
     setLinks("")
     setTimeEstimate("")
+    setRecurringPattern(null)
   }
 
   const handleAddTag = () => {
@@ -194,6 +196,22 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
                 </SelectItem>
               )
             })}
+          </SelectContent>
+        </Select>
+
+        {/* Recurring */}
+        <Select
+          value={recurringPattern || "none"}
+          onValueChange={(v) => setRecurringPattern(v === "none" ? null : (v as "daily" | "weekly" | "monthly"))}
+        >
+          <SelectTrigger className="w-auto bg-secondary border-border h-8">
+            <SelectValue placeholder="Recurring" />
+          </SelectTrigger>
+          <SelectContent className="bg-popover border-border shadow-md">
+            <SelectItem value="none">Does not repeat</SelectItem>
+            <SelectItem value="daily">Daily</SelectItem>
+            <SelectItem value="weekly">Weekly</SelectItem>
+            <SelectItem value="monthly">Monthly</SelectItem>
           </SelectContent>
         </Select>
       </div>

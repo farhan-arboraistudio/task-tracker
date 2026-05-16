@@ -72,6 +72,44 @@ export function SettingsPanel() {
     URL.revokeObjectURL(url)
   }
 
+  const handleImportData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target?.result as string)
+        if (data.tasks && Array.isArray(data.tasks)) {
+          // Merge imported tasks with existing ones, overwriting duplicates
+          const importedTasks = data.tasks as any[]
+          const newTasks = [...tasks]
+          
+          importedTasks.forEach(importedTask => {
+            const existingIndex = newTasks.findIndex(t => t.id === importedTask.id)
+            if (existingIndex >= 0) {
+              newTasks[existingIndex] = importedTask
+            } else {
+              newTasks.push(importedTask)
+            }
+          })
+          
+          localStorage.setItem("task-tracker-data", JSON.stringify(newTasks))
+          if (data.settings) {
+            localStorage.setItem("task-tracker-settings", JSON.stringify({ ...settings, ...data.settings }))
+          }
+          window.location.reload()
+        }
+      } catch (err) {
+        console.error("Failed to parse imported data:", err)
+        alert("Failed to import data. Invalid file format.")
+      }
+    }
+    reader.readAsText(file)
+    // reset input
+    event.target.value = ""
+  }
+
   const viewOptions: { value: ViewType; label: string }[] = [
     { value: "list", label: "List" },
     { value: "board", label: "Board" },
@@ -354,7 +392,7 @@ export function SettingsPanel() {
             <section className="space-y-3">
               <h3 className="text-sm font-medium text-foreground flex items-center gap-2">
                 <Download className="w-4 h-4 text-muted-foreground" />
-                Data
+                Data Backup & Recovery
               </h3>
               <div className="space-y-2 pl-6">
                 <Button
@@ -366,6 +404,24 @@ export function SettingsPanel() {
                   <Download className="w-4 h-4" />
                   Export all data
                 </Button>
+                
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={handleImportData}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full bg-secondary border-border hover:bg-secondary/80 gap-2 justify-start pointer-events-none"
+                  >
+                    <Download className="w-4 h-4 rotate-180" />
+                    Import data
+                  </Button>
+                </div>
+                
                 <p className="text-[11px] text-muted-foreground/60">
                   {tasks.length} tasks stored locally
                 </p>

@@ -320,7 +320,7 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
                   onClick={() => {
                     if (!tags.includes(preset)) setTags([...tags, preset])
                   }}
-                  className="px-2 py-0.5 text-xs bg-[rgba(60,57,52,0.4)] text-muted-foreground hover:text-foreground rounded transition-colors"
+                  className="px-2 py-0.5 text-xs bg-secondary hover:bg-secondary/80 text-secondary-foreground rounded transition-colors"
                 >
                   {preset}
                 </button>

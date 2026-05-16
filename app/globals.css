@@ -4,6 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  color-scheme: light;
+  accent-color: var(--primary);
   /* Warm creamy light theme */
   --background: #fdfcf8;
   --foreground: #2d2b2a;
@@ -68,6 +70,8 @@
 }
 
 .dark {
+  color-scheme: dark;
+  accent-color: var(--primary);
   /* Gray vintage dark theme */
   --background: #1a1a1a;
   --foreground: #e0dcd4;
@@ -235,4 +239,12 @@ body::before {
   pointer-events: none;
   z-index: 9999;
   opacity: 0.4;
+}
+
+/* Custom time input selection colors */
+input[type="time"]::-webkit-datetime-edit-hour-field:focus,
+input[type="time"]::-webkit-datetime-edit-minute-field:focus,
+input[type="time"]::-webkit-datetime-edit-ampm-field:focus {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
 }

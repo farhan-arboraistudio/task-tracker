@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react"
+import { addDays, addWeeks, addMonths } from "date-fns"
 import type { Task, Status, Priority, Quadrant, Subtask, Settings, ViewType } from "./types"
 import { inferQuadrant } from "./quadrant-engine"
 import { syncTaskToGoogleCalendar, deleteFromGoogleCalendar } from "./gcal-sync"
@@ -211,8 +212,10 @@ export function TaskProvider({ children }: { children: ReactNode }) {
 
   const updateTask = useCallback((id: string, updates: Partial<Task>) => {
     let updatedTask: Task | null = null
-    setTasks((prev) =>
-      prev.map((task) => {
+    let newTaskToSpawn: Task | null = null
+
+    setTasks((prev) => {
+      const newTasks = prev.map((task) => {
         if (task.id !== id) return task
         const updated = { ...task, ...updates, updatedAt: new Date() }
         
@@ -253,11 +256,41 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         } else {
            updated.priority = syncPriorityWithQuadrant(updated.quadrant, updated.priority)
         }
+
+        // Recurring logic
+        if (updates.status === "done" && task.status !== "done" && updated.recurringPattern && updated.dueDate) {
+          let nextDueDate = new Date(updated.dueDate)
+          if (updated.recurringPattern === "daily") nextDueDate = addDays(nextDueDate, 1)
+          else if (updated.recurringPattern === "weekly") nextDueDate = addWeeks(nextDueDate, 1)
+          else if (updated.recurringPattern === "monthly") nextDueDate = addMonths(nextDueDate, 1)
+
+          let nextReminder: Date | null = null
+          if (updated.reminder) {
+             const diff = updated.dueDate.getTime() - updated.reminder.getTime()
+             nextReminder = new Date(nextDueDate.getTime() - diff)
+          }
+
+          newTaskToSpawn = {
+            ...updated,
+            id: generateId(),
+            status: "todo",
+            dueDate: nextDueDate,
+            reminder: nextReminder,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            gcalEventId: undefined, // Don't copy GCal ID so it creates a new event
+          }
+        }
         
         updatedTask = updated
         return updated
       })
-    )
+
+      if (newTaskToSpawn) {
+        return [newTaskToSpawn, ...newTasks]
+      }
+      return newTasks
+    })
 
     // Google Calendar Sync
     if (updatedTask && settings.googleCalendarConnected) {
@@ -272,6 +305,17 @@ export function TaskProvider({ children }: { children: ReactNode }) {
           syncTaskToGoogleCalendar(u, token).then((eventId) => {
             if (eventId && !u.gcalEventId) {
               setTasks((prev) => prev.map((t) => t.id === id ? { ...t, gcalEventId: eventId } : t))
+            }
+          })
+        }
+      }
+
+      if (newTaskToSpawn) {
+        const spawned = newTaskToSpawn as Task;
+        if (token && spawned.dueDate) {
+          syncTaskToGoogleCalendar(spawned, token).then((eventId) => {
+            if (eventId) {
+              setTasks((prev) => prev.map((t) => t.id === spawned.id ? { ...t, gcalEventId: eventId } : t))
             }
           })
         }
