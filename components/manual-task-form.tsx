@@ -128,7 +128,7 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
               {dueDate ? format(dueDate, "MMM d") : "Date"}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0 bg-secondary border-border" align="start">
+          <PopoverContent className="w-auto p-0 bg-popover shadow-md border-border" align="start">
             <Calendar
               mode="single"
               selected={dueDate}

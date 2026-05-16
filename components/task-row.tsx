@@ -364,7 +364,7 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
                 )}
 
                 {/* Additional Details */}
-                {(task.description || task.links || task.timeEstimate || task.notes) && (
+                {(task.description || task.timeEstimate || task.notes) && (
                   <div className="mb-3 space-y-2 text-sm">
                     {task.description && (
                       <div className="text-muted-foreground">
@@ -384,16 +384,18 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
                         {task.timeEstimate}
                       </div>
                     )}
-                    {task.links && (
-                      <div className="text-muted-foreground break-all">
-                        <span className="text-foreground font-medium mr-2">Links:</span>
-                        <a href={task.links.startsWith('http') ? task.links : `https://${task.links}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">{task.links}</a>
-                      </div>
-                    )}
                   </div>
                 )}
 
                 <SubtaskList task={task} />
+                
+                {/* Links */}
+                {task.links && (
+                  <div className="mt-3 text-sm text-muted-foreground break-all">
+                    <span className="text-foreground font-medium mr-2">Links:</span>
+                    <a href={task.links.startsWith('http') ? task.links : `https://${task.links}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">{task.links}</a>
+                  </div>
+                )}
               </div>
             </motion.div>
           )}
