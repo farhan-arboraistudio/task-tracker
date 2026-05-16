@@ -187,11 +187,11 @@ export function SettingsPanel() {
                 <Flag className="w-4 h-4 text-muted-foreground" />
                 Priority Colors
               </h3>
-              <div className="space-y-4 pl-6">
+              <div className="space-y-3 pl-6">
                 {(Object.keys(PRIORITY_INFO) as Priority[]).map((priority) => {
                   const info = getPriorityInfo(priority, settings)
                   return (
-                    <div key={priority} className="flex flex-col gap-2">
+                    <div key={priority} className="flex flex-col gap-1.5">
                       <label className="text-sm text-muted-foreground capitalize">{info.label}</label>
                       <div className="flex flex-wrap gap-1.5">
                         {PRIORITY_COLOR_OPTIONS.map((color) => (
@@ -205,8 +205,8 @@ export function SettingsPanel() {
                                 },
                               })
                             }}
-                            className={`w-6 h-6 rounded-full transition-transform hover:scale-110 ${color} ${
-                              info.color === color ? "ring-2 ring-offset-2 ring-foreground" : "opacity-80"
+                            className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full transition-transform hover:scale-110 flex-shrink-0 ${color} ${
+                              info.color === color ? "ring-2 ring-offset-1 ring-foreground" : "opacity-80"
                             }`}
                             aria-label={`Set ${info.label} priority to ${color}`}
                           />
@@ -428,46 +428,7 @@ export function SettingsPanel() {
               </div>
             </section>
 
-            <div className="h-px bg-[rgba(120,112,100,0.15)]" />
 
-            {/* ---- Developer Tools ---- */}
-            <section className="space-y-3">
-              <h3 className="text-sm font-medium text-foreground flex items-center gap-2">
-                <Zap className="w-4 h-4 text-muted-foreground" />
-                Developer Tools
-              </h3>
-              <div className="space-y-2 pl-6">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    const mockTasks = Array.from({ length: 25 }).map((_, i) => ({
-                      id: `mock-${Date.now()}-${i}`,
-                      title: `Mock Task ${i + 1}`,
-                      dueDate: new Date(Date.now() + (Math.random() * 10 - 5) * 86400000), // Random date +/- 5 days
-                      priority: ["urgent", "high", "medium", "low"][Math.floor(Math.random() * 4)] as any,
-                      status: ["todo", "in-progress", "done"][Math.floor(Math.random() * 3)] as any,
-                      quadrant: ["do-first", "schedule", "delegate", "eliminate", null][Math.floor(Math.random() * 5)] as any,
-                      tags: ["mock", ["work", "personal", "health"][Math.floor(Math.random() * 3)]],
-                      subtasks: [],
-                      createdAt: new Date(),
-                      updatedAt: new Date(),
-                    }))
-                    localStorage.setItem("task-tracker-tasks", JSON.stringify([...tasks, ...mockTasks]))
-                    window.location.reload()
-                  }}
-                  className="w-full bg-secondary border-border hover:bg-secondary/80 gap-2 justify-start"
-                >
-                  <Zap className="w-4 h-4" />
-                  Generate 25 Mock Tasks
-                </Button>
-                <p className="text-[11px] text-muted-foreground/60">
-                  Adds random tasks to test performance and scrolling. Reloads the page.
-                </p>
-              </div>
-            </section>
-
-            <div className="h-px bg-[rgba(120,112,100,0.15)]" />
 
             {/* ---- Danger Zone ---- */}
             <section className="space-y-3">
