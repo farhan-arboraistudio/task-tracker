@@ -58,19 +58,35 @@ export async function deleteFromGoogleCalendar(eventId: string, accessToken: str
 
 export async function fetchGoogleTasks(accessToken: string) {
   try {
-    const response = await fetch("https://tasks.googleapis.com/tasks/v1/lists/@default/tasks?showCompleted=false&showHidden=false", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+    // 1. Fetch all task lists
+    const listsRes = await fetch("https://tasks.googleapis.com/tasks/v1/users/@me/lists", {
+      headers: { Authorization: `Bearer ${accessToken}` }
     })
     
-    if (!response.ok) {
-      console.error("Failed to fetch Google Tasks", await response.text())
+    if (!listsRes.ok) {
+      console.error("Failed to fetch task lists", await listsRes.text())
       return []
     }
+    
+    const listsData = await listsRes.json()
+    const lists = listsData.items || []
 
-    const data = await response.json()
-    return data.items || []
+    // 2. Fetch tasks for each list concurrently
+    const allTasks: any[] = []
+    const fetchPromises = lists.map(async (list: any) => {
+      const tasksRes = await fetch(`https://tasks.googleapis.com/tasks/v1/lists/${list.id}/tasks?maxResults=100&showCompleted=false&showHidden=true`, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      })
+      if (tasksRes.ok) {
+        const tasksData = await tasksRes.json()
+        if (tasksData.items) {
+          allTasks.push(...tasksData.items)
+        }
+      }
+    })
+
+    await Promise.all(fetchPromises)
+    return allTasks
   } catch (e) {
     console.error("Error fetching Google Tasks:", e)
     return []

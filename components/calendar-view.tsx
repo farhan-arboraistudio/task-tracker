@@ -29,7 +29,7 @@ interface DayProps {
   tasks: Task[]
   isCurrentMonth: boolean
   isSelected: boolean
-  onSelect: () => void
+  onSelect: (e: React.MouseEvent<HTMLButtonElement>) => void
   settings: Settings
 }
 
@@ -101,9 +101,10 @@ interface DayDetailPanelProps {
   date: Date
   tasks: Task[]
   onClose: () => void
+  position: { x: number; y: number }
 }
 
-function DayDetailPanel({ date, tasks, onClose }: DayDetailPanelProps) {
+function DayDetailPanel({ date, tasks, onClose, position }: DayDetailPanelProps) {
   const { updateStatus, settings } = useTasks()
   const [editingTask, setEditingTask] = useState<Task | null>(null)
 
@@ -123,12 +124,25 @@ function DayDetailPanel({ date, tasks, onClose }: DayDetailPanelProps) {
   )
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 20 }}
-      className="w-full lg:w-80 rounded-xl glass-panel bg-card p-4 flex-shrink-0"
-    >
+    <>
+      {/* Invisible Overlay for Outside Click */}
+      <div 
+        className="fixed inset-0 z-40" 
+        onClick={onClose}
+      />
+      
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.15 }}
+        style={{
+          position: "fixed",
+          top: Math.min(position.y, window.innerHeight - 400),
+          left: position.x > window.innerWidth / 2 ? position.x - 340 : position.x + 20,
+        }}
+        className="w-80 rounded-xl glass-panel bg-card p-4 shadow-2xl z-50 max-h-[400px] flex flex-col"
+      >
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-lg font-medium text-foreground">
@@ -254,6 +268,7 @@ function DayDetailPanel({ date, tasks, onClose }: DayDetailPanelProps) {
         onOpenChange={(open) => !open && setEditingTask(null)}
       />
     </motion.div>
+    </>
   )
 }
 
@@ -261,6 +276,7 @@ export function CalendarView() {
   const { tasks, externalTasks, settings } = useTasks()
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [popoverPos, setPopoverPos] = useState<{ x: number; y: number } | null>(null)
   const [showMonthPicker, setShowMonthPicker] = useState(false)
 
   const monthStart = startOfMonth(currentDate)
@@ -296,7 +312,7 @@ export function CalendarView() {
         if (et.due) {
           const dateKey = format(new Date(et.due), "yyyy-MM-dd")
           const existing = map.get(dateKey) || []
-          const externalTaskAsTask: Task = {
+          const externalTaskAsTask = ({
             id: `gcal-${et.id}`,
             title: et.title || "Untitled Task",
             createdAt: new Date(et.updated),
@@ -309,7 +325,7 @@ export function CalendarView() {
             subtasks: [],
             notes: et.notes || "",
             isExternal: true,
-          } as Task & { isExternal?: boolean }
+          } as unknown) as Task & { isExternal?: boolean }
           
           map.set(dateKey, [...existing, externalTaskAsTask])
         }
@@ -442,7 +458,11 @@ export function CalendarView() {
                 tasks={dayTasks}
                 isCurrentMonth={isSameMonth(day, currentDate)}
                 isSelected={selectedDate ? isSameDay(day, selectedDate) : false}
-                onSelect={() => setSelectedDate(day)}
+                onSelect={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect()
+                  setPopoverPos({ x: rect.right, y: rect.top })
+                  setSelectedDate(day)
+                }}
                 settings={settings}
               />
             )
@@ -464,11 +484,15 @@ export function CalendarView() {
 
       {/* Day Detail Panel */}
       <AnimatePresence>
-        {selectedDate && (
+        {selectedDate && popoverPos && (
           <DayDetailPanel
             date={selectedDate}
             tasks={selectedDateTasks}
-            onClose={() => setSelectedDate(null)}
+            position={popoverPos}
+            onClose={() => {
+              setSelectedDate(null)
+              setPopoverPos(null)
+            }}
           />
         )}
       </AnimatePresence>

@@ -251,7 +251,7 @@ function TaskTrackerContent() {
 
             {/* Calendar Toggle */}
             <button
-              onClick={() => handleViewChange(view === "calendar" ? lastNonMatrixView : "calendar")}
+              onClick={() => handleViewChange(view === "calendar" ? "list" : "calendar")}
               className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
                 view === "calendar"
                   ? "glass shadow-[0_0_20px_rgba(210,205,195,0.05)] text-foreground"
