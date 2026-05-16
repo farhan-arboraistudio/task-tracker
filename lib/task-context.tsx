@@ -213,11 +213,11 @@ export function TaskProvider({ children }: { children: ReactNode }) {
             tags: updated.tags,
           })
           
-          if (settings.autoAssignQuadrant && !updates.quadrant) {
+          if (settings.autoAssignQuadrant && !updates.quadrant && !updates.priority) {
             updated.quadrant = result.quadrant
           }
           
-          if (settings.autoPriority && !updated.quadrant) {
+          if (settings.autoPriority && !updated.quadrant && !updates.priority) {
             // Sync priority with quadrant inference
             const priorityRank: Record<string, number> = { urgent: 3, high: 2, medium: 1, low: 0 }
             if (priorityRank[result.inferredPriority] > priorityRank[updated.priority]) {
@@ -226,8 +226,18 @@ export function TaskProvider({ children }: { children: ReactNode }) {
           }
         }
         
-        // Ensure consistency
-        updated.priority = syncPriorityWithQuadrant(updated.quadrant, updated.priority)
+        // Ensure consistency, but don't override manual priority changes
+        if (updates.priority) {
+          // If user manually changed priority, update the quadrant to match if possible
+          if (updates.priority === "urgent") updated.quadrant = "do-first"
+          else if (updates.priority === "high") updated.quadrant = "schedule"
+          else if (updates.priority === "medium") updated.quadrant = "delegate"
+          else if (updates.priority === "low") updated.quadrant = "eliminate"
+        } else if (updates.quadrant) {
+           updated.priority = syncPriorityWithQuadrant(updated.quadrant, updated.priority)
+        } else {
+           updated.priority = syncPriorityWithQuadrant(updated.quadrant, updated.priority)
+        }
         
         return updated
       })

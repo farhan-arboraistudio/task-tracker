@@ -282,7 +282,7 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
                         className={`px-2 py-0.5 text-xs rounded-md transition-all ${
                           task.priority === value
                             ? `${info.color} text-white font-medium`
-                            : "bg-[rgba(45,43,40,0.4)] text-muted-foreground hover:text-foreground"
+                            : "bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
                         }`}
                       >
                         {info.label}
@@ -300,14 +300,14 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
                       className={`px-2 py-0.5 text-xs rounded-md transition-all ${
                         task.status === value
                           ? "bg-foreground text-background font-medium"
-                          : "bg-[rgba(45,43,40,0.4)] text-muted-foreground hover:text-foreground"
+                          : "bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
                       }`}
                     >
                       {info.label}
                     </button>
                   ))}
 
-                  <div className="w-px h-4 bg-[rgba(120,112,100,0.2)]" />
+                  <div className="w-px h-4 bg-secondary" />
 
                   {/* Carry Forward */}
                   <button
@@ -317,7 +317,7 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
                       tomorrow.setHours(9, 0, 0, 0)
                       updateTask(task.id, { dueDate: tomorrow })
                     }}
-                    className="flex items-center gap-1 px-2 py-0.5 text-xs rounded-md bg-[rgba(45,43,40,0.4)] text-muted-foreground hover:text-foreground transition-all"
+                    className="flex items-center gap-1 px-2 py-0.5 text-xs rounded-md bg-secondary text-muted-foreground hover:text-foreground transition-all"
                     title="Move to tomorrow"
                   >
                     <ArrowRight className="w-3 h-3" />
@@ -327,7 +327,7 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
                   {/* Delete */}
                   <button
                     onClick={() => deleteTask(task.id)}
-                    className="flex items-center gap-1 px-2 py-0.5 text-xs rounded-md bg-[rgba(45,43,40,0.4)] text-red-400/70 hover:text-red-400 hover:bg-red-500/10 transition-all ml-auto"
+                    className="flex items-center gap-1 px-2 py-0.5 text-xs rounded-md bg-secondary text-red-400/70 hover:text-red-400 hover:bg-red-500/10 transition-all ml-auto"
                   >
                     <Trash2 className="w-3 h-3" />
                     Delete
