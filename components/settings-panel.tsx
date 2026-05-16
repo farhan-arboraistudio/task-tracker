@@ -32,6 +32,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 export function SettingsPanel() {
   const { tasks, settings, updateSettings, autoSortTasks } = useTasks()
@@ -191,27 +196,37 @@ export function SettingsPanel() {
                 {(Object.keys(PRIORITY_INFO) as Priority[]).map((priority) => {
                   const info = getPriorityInfo(priority, settings)
                   return (
-                    <div key={priority} className="flex flex-col gap-1.5">
+                    <div key={priority} className="flex items-center justify-between">
                       <label className="text-sm text-muted-foreground capitalize">{info.label}</label>
-                      <div className="flex flex-wrap gap-1.5">
-                        {PRIORITY_COLOR_OPTIONS.map((color) => (
+                      <Popover>
+                        <PopoverTrigger asChild>
                           <button
-                            key={color}
-                            onClick={() => {
-                              updateSettings({
-                                customPriorityColors: {
-                                  ...(settings.customPriorityColors || {}),
-                                  [priority]: color,
-                                },
-                              })
-                            }}
-                            className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full transition-transform hover:scale-110 flex-shrink-0 ${color} ${
-                              info.color === color ? "ring-2 ring-offset-1 ring-foreground" : "opacity-80"
-                            }`}
-                            aria-label={`Set ${info.label} priority to ${color}`}
+                            className={`w-5 h-5 rounded-full flex-shrink-0 ring-2 ring-offset-1 ring-foreground ${info.color}`}
+                            aria-label={`Select ${info.label} priority color`}
                           />
-                        ))}
-                      </div>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[280px] p-3 bg-popover border-border" align="end">
+                          <div className="flex flex-wrap gap-2">
+                            {PRIORITY_COLOR_OPTIONS.map((color) => (
+                              <button
+                                key={color}
+                                onClick={() => {
+                                  updateSettings({
+                                    customPriorityColors: {
+                                      ...(settings.customPriorityColors || {}),
+                                      [priority]: color,
+                                    },
+                                  })
+                                }}
+                                className={`w-6 h-6 rounded-full transition-transform hover:scale-110 flex-shrink-0 ${color} ${
+                                  info.color === color ? "ring-2 ring-offset-2 ring-foreground" : "opacity-80"
+                                }`}
+                                aria-label={`Set ${info.label} priority to ${color}`}
+                              />
+                            ))}
+                          </div>
+                        </PopoverContent>
+                      </Popover>
                     </div>
                   )
                 })}
