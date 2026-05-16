@@ -19,6 +19,7 @@ import { CompactView } from "./compact-view"
 import { EisenhowerMatrix } from "./eisenhower-matrix"
 import { CalendarView } from "./calendar-view"
 import { SettingsPanel } from "./settings-panel"
+import { ThemeToggle } from "./theme-toggle"
 import { AnimatePresence, motion } from "framer-motion"
 import type { Task, Quadrant, ViewType } from "@/lib/types"
 import {
@@ -47,7 +48,7 @@ const ALL_VIEW_MAP: Record<ViewType, { label: string; icon: React.ReactNode }> =
 }
 
 function TaskTrackerContent() {
-  const { tasks, settings, moveToQuadrant, trackViewUsage } = useTasks()
+  const { tasks, settings, moveToQuadrant, trackViewUsage, isLoaded } = useTasks()
   const [view, setView] = useState<ViewType>("list")
   const [lastNonMatrixView, setLastNonMatrixView] = useState<Exclude<ViewType, "matrix">>("list")
   const [showViewPicker, setShowViewPicker] = useState(false)
@@ -56,14 +57,14 @@ function TaskTrackerContent() {
 
   // Set startup view from settings on first load
   useEffect(() => {
-    if (!initialized && settings.startupView) {
+    if (isLoaded && !initialized && settings.startupView) {
       setView(settings.startupView)
       if (settings.startupView !== "matrix") {
         setLastNonMatrixView(settings.startupView as Exclude<ViewType, "matrix">)
       }
       setInitialized(true)
     }
-  }, [settings.startupView, initialized])
+  }, [isLoaded, settings.startupView, initialized])
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -117,7 +118,7 @@ function TaskTrackerContent() {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="min-h-screen bg-[#1a1a1a]">
+      <div className="min-h-screen bg-background">
         <div className="max-w-5xl mx-auto px-4 py-6 sm:py-8">
           {/* Header */}
           <header className="flex items-start justify-between mb-8">
@@ -129,7 +130,10 @@ function TaskTrackerContent() {
                 Organize your work with smart task management
               </p>
             </div>
-            <SettingsPanel />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <SettingsPanel />
+            </div>
           </header>
 
           {/* Smart Input */}
@@ -181,7 +185,7 @@ function TaskTrackerContent() {
                           className={`flex items-center gap-2.5 w-full px-3 py-2 rounded-lg text-sm transition-all ${
                             view === option.value && !isMatrix
                               ? "bg-foreground text-background font-medium"
-                              : "text-muted-foreground hover:text-foreground hover:bg-[rgba(70,66,60,0.5)]"
+                              : "text-muted-foreground hover:text-foreground hover:bg-muted"
                           }`}
                         >
                           {option.icon}

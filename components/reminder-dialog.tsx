@@ -74,7 +74,7 @@ export function ReminderDialog({ task, open, onOpenChange }: ReminderDialogProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-[#252320] border-[rgba(120,112,100,0.2)] max-w-sm">
+      <DialogContent className="bg-popover border-border max-w-sm">
         <DialogHeader>
           <DialogTitle className="text-foreground flex items-center gap-2">
             <Bell className="w-5 h-5" />
@@ -85,7 +85,7 @@ export function ReminderDialog({ task, open, onOpenChange }: ReminderDialogProps
         <div className="space-y-4 py-4">
           {/* Current reminder */}
           {task.reminder && (
-            <div className="p-3 rounded-lg bg-[rgba(45,43,40,0.45)] text-sm">
+            <div className="p-3 rounded-lg bg-secondary text-sm">
               <span className="text-muted-foreground">Current reminder: </span>
               <span className="text-foreground">
                 {format(new Date(task.reminder), "MMM d, yyyy 'at' h:mm a")}
@@ -103,7 +103,7 @@ export function ReminderDialog({ task, open, onOpenChange }: ReminderDialogProps
                   variant="outline"
                   size="sm"
                   onClick={() => handleQuickOption(option.getValue)}
-                  className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)] text-sm"
+                  className="bg-secondary border-border hover:bg-secondary/80 text-sm"
                 >
                   {option.label}
                 </Button>
@@ -119,13 +119,13 @@ export function ReminderDialog({ task, open, onOpenChange }: ReminderDialogProps
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-full justify-start bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)] text-left font-normal"
+                    className="w-full justify-start bg-secondary border-border hover:bg-secondary/80 text-left font-normal"
                   >
                     <CalendarIcon className="w-4 h-4 mr-2" />
                     {date ? format(date, "MMM d") : "Date"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-[#252320] border-[rgba(120,112,100,0.2)]" align="start">
+                <PopoverContent className="w-auto p-0 bg-popover border-border" align="start">
                   <Calendar
                     mode="single"
                     selected={date}
@@ -141,7 +141,7 @@ export function ReminderDialog({ task, open, onOpenChange }: ReminderDialogProps
                   type="time"
                   value={time}
                   onChange={(e) => setTime(e.target.value)}
-                  className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] focus:border-foreground/40"
+                  className="bg-secondary border-border focus:border-foreground/40"
                 />
               </div>
             </div>
@@ -160,7 +160,7 @@ export function ReminderDialog({ task, open, onOpenChange }: ReminderDialogProps
             <Button
               variant="outline"
               onClick={handleClearReminder}
-              className="w-full sm:w-auto bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)] text-red-400 hover:text-red-400"
+              className="w-full sm:w-auto bg-secondary border-border hover:bg-secondary/80 text-red-400 hover:text-red-400"
             >
               Clear Reminder
             </Button>
@@ -168,7 +168,7 @@ export function ReminderDialog({ task, open, onOpenChange }: ReminderDialogProps
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="w-full sm:w-auto bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)]"
+            className="w-full sm:w-auto bg-secondary border-border hover:bg-secondary/80"
           >
             Cancel
           </Button>

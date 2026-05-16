@@ -52,11 +52,11 @@ export function TaskActionsMenu({ task, onEdit, onSetReminder, onOpenChange }: T
     <>
       <DropdownMenu onOpenChange={onOpenChange}>
         <DropdownMenuTrigger asChild>
-          <button className="p-1.5 rounded hover:bg-[rgba(70,66,60,0.5)] text-muted-foreground hover:text-foreground transition-colors">
+          <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
             <MoreHorizontal className="w-4 h-4" />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48 bg-[#252320] border-[rgba(120,112,100,0.2)]">
+        <DropdownMenuContent align="end" className="w-48 bg-popover border-border">
           <DropdownMenuItem onClick={onEdit} className="gap-2 cursor-pointer">
             <Pencil className="w-4 h-4" />
             Edit Task
@@ -77,14 +77,14 @@ export function TaskActionsMenu({ task, onEdit, onSetReminder, onOpenChange }: T
             Set Reminder
           </DropdownMenuItem>
 
-          <DropdownMenuSeparator className="bg-[rgba(70,66,60,0.5)]" />
+          <DropdownMenuSeparator className="bg-muted" />
 
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="gap-2 cursor-pointer">
               <Target className="w-4 h-4" />
               Move to Quadrant
             </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent className="bg-[#252320] border-[rgba(120,112,100,0.2)]">
+            <DropdownMenuSubContent className="bg-popover border-border">
               {quadrants.map((q) => {
                 const info = QUADRANT_INFO[q]
                 return (
@@ -100,7 +100,7 @@ export function TaskActionsMenu({ task, onEdit, onSetReminder, onOpenChange }: T
               })}
               {task.quadrant && (
                 <>
-                  <DropdownMenuSeparator className="bg-[rgba(70,66,60,0.5)]" />
+                  <DropdownMenuSeparator className="bg-muted" />
                   <DropdownMenuItem
                     onClick={() => moveToQuadrant(task.id, null)}
                     className="gap-2 cursor-pointer text-muted-foreground"
@@ -112,7 +112,7 @@ export function TaskActionsMenu({ task, onEdit, onSetReminder, onOpenChange }: T
             </DropdownMenuSubContent>
           </DropdownMenuSub>
 
-          <DropdownMenuSeparator className="bg-[rgba(70,66,60,0.5)]" />
+          <DropdownMenuSeparator className="bg-muted" />
 
           <DropdownMenuItem
             onClick={() => setShowDeleteConfirm(true)}
@@ -125,7 +125,7 @@ export function TaskActionsMenu({ task, onEdit, onSetReminder, onOpenChange }: T
       </DropdownMenu>
 
       <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
-        <AlertDialogContent className="bg-[#252320] border-[rgba(120,112,100,0.2)]">
+        <AlertDialogContent className="bg-popover border-border">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Task</AlertDialogTitle>
             <AlertDialogDescription>
@@ -133,7 +133,7 @@ export function TaskActionsMenu({ task, onEdit, onSetReminder, onOpenChange }: T
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="bg-[rgba(55,52,48,0.5)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(70,66,60,0.5)]">
+            <AlertDialogCancel className="bg-secondary/80 border-border hover:bg-muted">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction

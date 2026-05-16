@@ -69,12 +69,12 @@ export function SmartInput() {
     <div className="sticky top-0 z-10 pb-4">
       {/* Mode Toggle */}
       <div className="flex items-center gap-2 mb-3">
-        <div className="flex items-center gap-1 p-1 bg-[rgba(45,43,40,0.45)] rounded-lg">
+        <div className="flex items-center gap-1 p-1 bg-secondary rounded-lg">
           <button
             onClick={() => setInputMode("smart")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-sm transition-colors ${
               inputMode === "smart"
-                ? "bg-[rgba(70,66,60,0.5)] text-foreground"
+                ? "bg-muted text-foreground"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -85,7 +85,7 @@ export function SmartInput() {
             onClick={() => setInputMode("manual")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-sm transition-colors ${
               inputMode === "manual"
-                ? "bg-[rgba(70,66,60,0.5)] text-foreground"
+                ? "bg-muted text-foreground"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -164,7 +164,7 @@ export function SmartInput() {
 
                           {/* Date */}
                           {parsedTask.dueDate && (
-                            <span className="flex items-center gap-1 text-xs px-2 py-1 bg-[rgba(55,52,48,0.5)] text-blue-400 rounded">
+                            <span className="flex items-center gap-1 text-xs px-2 py-1 bg-secondary/80 text-blue-400 rounded">
                               <Calendar className="w-3 h-3" />
                               {formatDueDate(parsedTask.dueDate)}
                             </span>
@@ -173,7 +173,7 @@ export function SmartInput() {
                           {/* Priority */}
                           {(parsedTask.isPriorityExplicit || settings.autoPriority) && (
                             <span
-                            className={`flex items-center gap-1 text-xs px-2 py-1 bg-[rgba(55,52,48,0.5)] rounded ${
+                            className={`flex items-center gap-1 text-xs px-2 py-1 bg-secondary/80 rounded ${
                               parsedTask.priority === "urgent"
                                 ? "text-red-400"
                                 : parsedTask.priority === "high"
@@ -192,7 +192,7 @@ export function SmartInput() {
                           {parsedTask.tags.map((tag) => (
                             <span
                               key={tag}
-                              className="flex items-center gap-1 text-xs px-2 py-1 bg-[rgba(55,52,48,0.5)] text-muted-foreground rounded"
+                              className="flex items-center gap-1 text-xs px-2 py-1 bg-secondary/80 text-muted-foreground rounded"
                             >
                               <Hash className="w-3 h-3" />
                               {tag}

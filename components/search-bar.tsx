@@ -18,7 +18,7 @@ export function SearchBar({ value, onChange, hideCompleted, onToggleHideComplete
     <div className="flex items-center gap-3">
       <div
         className={`flex-1 flex items-center gap-2 px-4 py-2.5 rounded-lg transition-colors duration-200 ${
-          isFocused ? "bg-[rgba(60,57,52,0.5)]" : "bg-[rgba(45,43,40,0.45)]"
+          isFocused ? "bg-[rgba(60,57,52,0.5)]" : "bg-secondary"
         }`}
       >
         <Search className="w-4 h-4 text-muted-foreground" />
@@ -38,7 +38,7 @@ export function SearchBar({ value, onChange, hideCompleted, onToggleHideComplete
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               onClick={() => onChange("")}
-              className="p-1 rounded hover:bg-[rgba(70,66,60,0.5)] transition-colors"
+              className="p-1 rounded hover:bg-muted transition-colors"
             >
               <X className="w-3 h-3 text-muted-foreground" />
             </motion.button>
@@ -51,7 +51,7 @@ export function SearchBar({ value, onChange, hideCompleted, onToggleHideComplete
         className={`flex items-center gap-2 px-3 py-2.5 rounded-lg transition-colors duration-200 text-sm ${
           hideCompleted
             ? "bg-[rgba(60,57,52,0.5)] text-foreground"
-            : "bg-[rgba(45,43,40,0.45)] text-muted-foreground hover:text-foreground"
+            : "bg-secondary text-muted-foreground hover:text-foreground"
         }`}
       >
         {hideCompleted ? (

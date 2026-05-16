@@ -40,7 +40,7 @@ export function SubtaskList({ task }: SubtaskListProps) {
       {/* Progress bar */}
       {totalCount > 0 && (
         <div className="flex items-center gap-3 mb-3">
-          <div className="flex-1 h-1.5 bg-[rgba(70,66,60,0.5)] rounded-full overflow-hidden">
+          <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
             <motion.div
               className="h-full bg-foreground rounded-full"
               initial={{ width: 0 }}
@@ -100,7 +100,7 @@ export function SubtaskList({ task }: SubtaskListProps) {
             </span>
             <button
               onClick={() => deleteSubtask(task.id, subtask.id)}
-              className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-[rgba(70,66,60,0.5)] text-muted-foreground hover:text-red-400 transition-all"
+              className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-muted text-muted-foreground hover:text-red-400 transition-all"
             >
               <Trash2 className="w-3 h-3" />
             </button>

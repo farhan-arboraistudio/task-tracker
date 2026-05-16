@@ -86,8 +86,8 @@ function DraggableSidebarTask({ task }: DraggableSidebarTaskProps) {
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      className={`p-2 rounded-lg bg-[rgba(45,43,40,0.45)] cursor-grab active:cursor-grabbing transition-all ${
-        isDragging ? "opacity-50 scale-95" : "hover:bg-[rgba(55,52,48,0.5)]"
+      className={`p-2 rounded-lg bg-secondary cursor-grab active:cursor-grabbing transition-all ${
+        isDragging ? "opacity-50 scale-95" : "hover:bg-secondary/80"
       }`}
     >
       <div className="flex items-start gap-2">
@@ -187,7 +187,7 @@ export function EisenhowerMatrix() {
                 variant="outline"
                 size="sm"
                 onClick={autoSortTasks}
-                className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)] gap-2"
+                className="bg-secondary border-border hover:bg-secondary/80 gap-2"
               >
                 <Wand2 className="w-4 h-4" />
                 Auto-sort ({unassignedCount})
@@ -202,7 +202,7 @@ export function EisenhowerMatrix() {
               className={`hidden lg:flex gap-2 transition-colors ${
                 sidebarOpen 
                   ? "bg-foreground text-background hover:bg-foreground/90 border-transparent" 
-                  : "bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] text-foreground hover:bg-[rgba(55,52,48,0.5)]"
+                  : "bg-secondary border-border text-foreground hover:bg-secondary/80"
               }`}
             >
               <Pencil className="w-3.5 h-3.5" />
@@ -242,18 +242,18 @@ export function EisenhowerMatrix() {
             transition={{ duration: 0.2 }}
             className="hidden lg:block overflow-hidden"
           >
-            <div className="w-[280px] h-full rounded-xl glass-panel bg-[rgba(35,33,30,0.6)] p-4">
+            <div className="w-[280px] h-full rounded-xl glass-panel bg-card p-4">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-medium text-foreground">Tasks</h3>
                 <Select
                   value={sidebarFilter}
                   onValueChange={(v) => setSidebarFilter(v as typeof sidebarFilter)}
                 >
-                  <SelectTrigger className="w-auto h-7 text-xs bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]">
+                  <SelectTrigger className="w-auto h-7 text-xs bg-secondary border-border">
                     <Filter className="w-3 h-3 mr-1" />
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]">
+                  <SelectContent className="bg-secondary border-border">
                     <SelectItem value="unassigned">Unassigned ({unassignedCount})</SelectItem>
                     <SelectItem value="all">All Tasks</SelectItem>
                     <SelectItem value="urgent">Urgent</SelectItem>
@@ -279,12 +279,12 @@ export function EisenhowerMatrix() {
               </div>
 
               {sidebarFilter === "unassigned" && unassignedCount > 0 && (
-                <div className="mt-4 pt-4 border-t border-[rgba(120,112,100,0.2)]">
+                <div className="mt-4 pt-4 border-t border-border">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={autoSortTasks}
-                    className="w-full bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)] gap-2"
+                    className="w-full bg-secondary border-border hover:bg-secondary/80 gap-2"
                   >
                     <Wand2 className="w-4 h-4" />
                     Auto-sort All

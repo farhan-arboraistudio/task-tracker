@@ -67,7 +67,7 @@ export function CompactView() {
             return (
               <div
                 key={task.id}
-                className={`flex items-center gap-3 px-3 py-2 hover:bg-[rgba(60,57,52,0.3)] transition-colors ${
+                className={`flex items-center gap-3 px-3 py-2 hover:bg-secondary/60 transition-colors ${
                   task.status === "done" ? "opacity-50" : ""
                 }`}
               >

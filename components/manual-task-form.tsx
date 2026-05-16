@@ -107,7 +107,7 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
         <Input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] focus:border-foreground/40 text-base"
+          className="bg-secondary border-border focus:border-foreground/40 text-base"
           placeholder="What do you need to do?"
           autoFocus
         />
@@ -122,13 +122,13 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
               type="button"
               variant="outline"
               size="sm"
-              className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)]"
+              className="bg-secondary border-border hover:bg-secondary/80"
             >
               <CalendarIcon className="w-4 h-4 mr-2" />
               {dueDate ? format(dueDate, "MMM d") : "Date"}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0 bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]" align="start">
+          <PopoverContent className="w-auto p-0 bg-secondary border-border" align="start">
             <Calendar
               mode="single"
               selected={dueDate}
@@ -140,7 +140,7 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
 
         {/* Time */}
         {dueDate && (
-          <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-[rgba(45,43,40,0.45)] border border-[rgba(120,112,100,0.2)]">
+          <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-secondary border border-border">
             <Clock className="w-4 h-4 text-muted-foreground" />
             <Input
               type="time"
@@ -153,11 +153,11 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
 
         {/* Priority */}
         <Select value={priority} onValueChange={(v) => setPriority(v as Priority)}>
-          <SelectTrigger className="w-auto bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] h-8">
+          <SelectTrigger className="w-auto bg-secondary border-border h-8">
             <Flag className="w-4 h-4 mr-1" />
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]">
+          <SelectContent className="bg-secondary border-border">
             {Object.entries(PRIORITY_INFO).map(([value, info]) => (
               <SelectItem key={value} value={value}>
                 <span className="flex items-center gap-2">
@@ -174,10 +174,10 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
           value={quadrant || "none"}
           onValueChange={(v) => setQuadrant(v === "none" ? null : (v as Quadrant))}
         >
-          <SelectTrigger className="w-auto bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] h-8">
+          <SelectTrigger className="w-auto bg-secondary border-border h-8">
             <SelectValue placeholder="Quadrant" />
           </SelectTrigger>
-          <SelectContent className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]">
+          <SelectContent className="bg-secondary border-border">
             <SelectItem value="none">No quadrant</SelectItem>
             {Object.entries(QUADRANT_INFO).map(([value, info]) => (
               <SelectItem key={value} value={value}>
@@ -195,7 +195,7 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="flex items-center gap-1 px-2 py-0.5 text-xs bg-[rgba(55,52,48,0.5)] text-muted-foreground rounded"
+                className="flex items-center gap-1 px-2 py-0.5 text-xs bg-secondary/80 text-muted-foreground rounded"
               >
                 #{tag}
                 <button
@@ -210,7 +210,7 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
           </div>
         )}
         <div className="flex gap-2">
-          <div className="flex items-center gap-1 flex-1 px-2 py-1 rounded-md bg-[rgba(45,43,40,0.45)] border border-[rgba(120,112,100,0.2)]">
+          <div className="flex items-center gap-1 flex-1 px-2 py-1 rounded-md bg-secondary border border-border">
             <Tag className="w-4 h-4 text-muted-foreground" />
             <Input
               value={newTag}
@@ -226,7 +226,7 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
             size="sm"
             onClick={handleAddTag}
             disabled={!newTag.trim()}
-            className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)]"
+            className="bg-secondary border-border hover:bg-secondary/80"
           >
             <Plus className="w-4 h-4" />
           </Button>
@@ -234,13 +234,13 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
       </div>
 
       {/* Additional Fields (Optional) */}
-      <div className="space-y-3 pt-2 border-t border-[rgba(120,112,100,0.2)]">
+      <div className="space-y-3 pt-2 border-t border-border">
         <div className="flex items-center gap-2">
           <AlignLeft className="w-4 h-4 text-muted-foreground shrink-0" />
           <Input
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] focus:border-foreground/40 text-sm h-8"
+            className="bg-secondary border-border focus:border-foreground/40 text-sm h-8"
             placeholder="Add description (optional)..."
           />
         </div>
@@ -249,7 +249,7 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
           <Input
             value={links}
             onChange={(e) => setLinks(e.target.value)}
-            className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] focus:border-foreground/40 text-sm h-8"
+            className="bg-secondary border-border focus:border-foreground/40 text-sm h-8"
             placeholder="Add links (optional)..."
           />
         </div>
@@ -258,7 +258,7 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
           <Input
             value={timeEstimate}
             onChange={(e) => setTimeEstimate(e.target.value)}
-            className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] focus:border-foreground/40 text-sm h-8"
+            className="bg-secondary border-border focus:border-foreground/40 text-sm h-8"
             placeholder="Time estimate (e.g., 2h) (optional)..."
           />
         </div>
@@ -272,7 +272,7 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
             variant="outline"
             size="sm"
             onClick={onCancel}
-            className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)]"
+            className="bg-secondary border-border hover:bg-secondary/80"
           >
             Cancel
           </Button>

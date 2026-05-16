@@ -45,8 +45,8 @@ function DayCell({ date, tasks, isCurrentMonth, isSelected, onSelect }: DayProps
         isCurrentMonth ? "" : "opacity-40"
       } ${
         isSelected
-          ? "bg-[rgba(55,52,48,0.5)] ring-1 ring-foreground/20"
-          : "hover:bg-[rgba(45,43,40,0.45)]"
+          ? "bg-secondary/80 ring-1 ring-foreground/20"
+          : "hover:bg-secondary"
       }`}
     >
       <span
@@ -69,10 +69,10 @@ function DayCell({ date, tasks, isCurrentMonth, isSelected, onSelect }: DayProps
               key={task.id}
               className={`text-[10px] truncate px-1 py-0.5 rounded ${
                 task.status === "done"
-                  ? "bg-[rgba(70,66,60,0.5)] text-muted-foreground line-through"
+                  ? "bg-muted text-muted-foreground line-through"
                   : isOverdue
                   ? "bg-red-500/20 text-red-400"
-                  : "bg-[rgba(55,52,48,0.5)] text-foreground"
+                  : "bg-secondary/80 text-foreground"
               }`}
             >
               <span
@@ -122,7 +122,7 @@ function DayDetailPanel({ date, tasks, onClose }: DayDetailPanelProps) {
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
-      className="w-full lg:w-80 rounded-xl glass-panel bg-[rgba(35,33,30,0.6)] p-4 flex-shrink-0"
+      className="w-full lg:w-80 rounded-xl glass-panel bg-card p-4 flex-shrink-0"
     >
       <div className="flex items-center justify-between mb-4">
         <div>
@@ -135,7 +135,7 @@ function DayDetailPanel({ date, tasks, onClose }: DayDetailPanelProps) {
         </div>
         <button
           onClick={onClose}
-          className="p-1 rounded hover:bg-[rgba(45,43,40,0.45)] text-muted-foreground"
+          className="p-1 rounded hover:bg-secondary text-muted-foreground"
         >
           <ChevronRight className="w-5 h-5" />
         </button>
@@ -169,10 +169,10 @@ function DayDetailPanel({ date, tasks, onClose }: DayDetailPanelProps) {
                 key={task.id}
                 className={`p-3 rounded-lg transition-colors ${
                   task.status === "done"
-                    ? "bg-[rgba(45,43,40,0.45)] opacity-60"
+                    ? "bg-secondary opacity-60"
                     : isOverdue
                     ? "bg-red-500/10 border border-red-500/20"
-                    : "bg-[rgba(45,43,40,0.45)] hover:bg-[rgba(55,52,48,0.5)]"
+                    : "bg-secondary hover:bg-secondary/80"
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -230,7 +230,7 @@ function DayDetailPanel({ date, tasks, onClose }: DayDetailPanelProps) {
                   </div>
                   <button
                     onClick={() => setEditingTask(task)}
-                    className="p-1 rounded hover:bg-[rgba(70,66,60,0.5)] text-muted-foreground hover:text-foreground"
+                    className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
                   >
                     <Plus className="w-4 h-4 rotate-45" />
                   </button>
@@ -346,8 +346,8 @@ export function CalendarView() {
                               isCurrentMonth
                                 ? "bg-foreground text-background font-medium"
                                 : isThisMonth
-                                ? "ring-1 ring-foreground/20 text-foreground hover:bg-[rgba(70,66,60,0.5)]"
-                                : "text-muted-foreground hover:text-foreground hover:bg-[rgba(70,66,60,0.5)]"
+                                ? "ring-1 ring-foreground/20 text-foreground hover:bg-muted"
+                                : "text-muted-foreground hover:text-foreground hover:bg-muted"
                             }`}
                           >
                             {month}
@@ -362,19 +362,19 @@ export function CalendarView() {
             <div className="flex items-center gap-1">
               <button
                 onClick={goToPreviousMonth}
-                className="p-1.5 rounded hover:bg-[rgba(45,43,40,0.45)] text-muted-foreground hover:text-foreground transition-colors"
+                className="p-1.5 rounded hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={goToToday}
-                className="px-2 py-1 text-xs rounded hover:bg-[rgba(45,43,40,0.45)] text-muted-foreground hover:text-foreground transition-colors"
+                className="px-2 py-1 text-xs rounded hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
               >
                 Today
               </button>
               <button
                 onClick={goToNextMonth}
-                className="p-1.5 rounded hover:bg-[rgba(45,43,40,0.45)] text-muted-foreground hover:text-foreground transition-colors"
+                className="p-1.5 rounded hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>

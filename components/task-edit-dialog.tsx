@@ -121,7 +121,7 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-[#252320] border-[rgba(120,112,100,0.2)] max-w-xl max-h-[90vh] overflow-y-auto shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
+      <DialogContent className="bg-popover border-border max-w-xl max-h-[90vh] overflow-y-auto shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
         <DialogHeader>
           <DialogTitle className="text-foreground">Edit Task</DialogTitle>
         </DialogHeader>
@@ -133,7 +133,7 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] focus:border-foreground/40"
+              className="bg-secondary border-border focus:border-foreground/40"
               placeholder="Task title"
             />
           </div>
@@ -149,12 +149,12 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-full justify-start bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)] text-left font-normal"
+                    className="w-full justify-start bg-secondary border-border hover:bg-secondary/80 text-left font-normal"
                   >
                     {dueDate ? format(dueDate, "MMM d, yyyy") : "Select date"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-[#252320] border-[rgba(120,112,100,0.2)]" align="start">
+                <PopoverContent className="w-auto p-0 bg-popover border-border" align="start">
                   <Calendar
                     mode="single"
                     selected={dueDate}
@@ -174,7 +174,7 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
                 type="time"
                 value={dueTime}
                 onChange={(e) => setDueTime(e.target.value)}
-                className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] focus:border-foreground/40"
+                className="bg-secondary border-border focus:border-foreground/40"
               />
             </div>
           </div>
@@ -187,10 +187,10 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
                 Priority
               </label>
               <Select value={priority} onValueChange={(v) => setPriority(v as Priority)}>
-                <SelectTrigger className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]">
+                <SelectTrigger className="bg-secondary border-border">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#252320] border-[rgba(120,112,100,0.2)]">
+                <SelectContent className="bg-popover border-border">
                   {Object.entries(PRIORITY_INFO).map(([value, info]) => (
                     <SelectItem key={value} value={value}>
                       <span className="flex items-center gap-2">
@@ -206,10 +206,10 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
             <div className="space-y-2">
               <label className="text-sm text-muted-foreground">Status</label>
               <Select value={status} onValueChange={(v) => setStatus(v as Status)}>
-                <SelectTrigger className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]">
+                <SelectTrigger className="bg-secondary border-border">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#252320] border-[rgba(120,112,100,0.2)]">
+                <SelectContent className="bg-popover border-border">
                   {Object.entries(STATUS_INFO).map(([value, info]) => (
                     <SelectItem key={value} value={value}>
                       {info.label}
@@ -228,10 +228,10 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
                 value={quadrant || "none"}
                 onValueChange={(v) => setQuadrant(v === "none" ? null : (v as Quadrant))}
               >
-                <SelectTrigger className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]">
+                <SelectTrigger className="bg-secondary border-border">
                   <SelectValue placeholder="No quadrant" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#252320] border-[rgba(120,112,100,0.2)]">
+                <SelectContent className="bg-popover border-border">
                   <SelectItem value="none">No quadrant</SelectItem>
                   {Object.entries(QUADRANT_INFO).map(([value, info]) => (
                     <SelectItem key={value} value={value}>
@@ -248,10 +248,10 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
                 value={recurringPattern || "none"}
                 onValueChange={(v) => setRecurringPattern(v === "none" ? null : (v as "daily" | "weekly" | "monthly"))}
               >
-                <SelectTrigger className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]">
+                <SelectTrigger className="bg-secondary border-border">
                   <SelectValue placeholder="Not recurring" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#252320] border-[rgba(120,112,100,0.2)]">
+                <SelectContent className="bg-popover border-border">
                   <SelectItem value="none">Not recurring</SelectItem>
                   <SelectItem value="daily">Daily</SelectItem>
                   <SelectItem value="weekly">Weekly</SelectItem>
@@ -271,7 +271,7 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
               {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="flex items-center gap-1 px-2 py-1 text-xs bg-[rgba(55,52,48,0.5)] text-muted-foreground rounded"
+                  className="flex items-center gap-1 px-2 py-1 text-xs bg-secondary/80 text-muted-foreground rounded"
                 >
                   #{tag}
                   <button
@@ -288,7 +288,7 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleAddTag())}
-                className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] focus:border-foreground/40"
+                className="bg-secondary border-border focus:border-foreground/40"
                 placeholder="Add tag..."
               />
               <Button
@@ -296,7 +296,7 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
                 variant="outline"
                 size="sm"
                 onClick={handleAddTag}
-                className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)]"
+                className="bg-secondary border-border hover:bg-secondary/80"
               >
                 <Plus className="w-4 h-4" />
               </Button>
@@ -312,7 +312,7 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
             <Textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] focus:border-foreground/40 min-h-[60px]"
+              className="bg-secondary border-border focus:border-foreground/40 min-h-[60px]"
               placeholder="Add description..."
             />
           </div>
@@ -327,7 +327,7 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
               <Input
                 value={links}
                 onChange={(e) => setLinks(e.target.value)}
-                className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] focus:border-foreground/40"
+                className="bg-secondary border-border focus:border-foreground/40"
                 placeholder="https://..."
               />
             </div>
@@ -339,7 +339,7 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
               <Input
                 value={timeEstimate}
                 onChange={(e) => setTimeEstimate(e.target.value)}
-                className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] focus:border-foreground/40"
+                className="bg-secondary border-border focus:border-foreground/40"
                 placeholder="e.g. 2h 30m"
               />
             </div>
@@ -354,7 +354,7 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
             <Textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] focus:border-foreground/40 min-h-[60px]"
+              className="bg-secondary border-border focus:border-foreground/40 min-h-[60px]"
               placeholder="Add notes..."
             />
           </div>
@@ -366,7 +366,7 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
               {task.subtasks.map((subtask) => (
                 <div
                   key={subtask.id}
-                  className="flex items-center gap-2 p-2 rounded bg-[rgba(45,43,40,0.45)]"
+                  className="flex items-center gap-2 p-2 rounded bg-secondary"
                 >
                   <button
                     onClick={() => toggleSubtask(task.id, subtask.id)}
@@ -413,7 +413,7 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
                 value={newSubtask}
                 onChange={(e) => setNewSubtask(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleAddSubtask())}
-                className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] focus:border-foreground/40"
+                className="bg-secondary border-border focus:border-foreground/40"
                 placeholder="Add subtask..."
               />
               <Button
@@ -421,7 +421,7 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
                 variant="outline"
                 size="sm"
                 onClick={handleAddSubtask}
-                className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)]"
+                className="bg-secondary border-border hover:bg-secondary/80"
               >
                 <Plus className="w-4 h-4" />
               </Button>
@@ -433,7 +433,7 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)]"
+            className="bg-secondary border-border hover:bg-secondary/80"
           >
             Cancel
           </Button>

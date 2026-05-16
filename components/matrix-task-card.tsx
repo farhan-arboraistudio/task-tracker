@@ -71,7 +71,7 @@ export function MatrixTaskCard({ task, quadrant }: MatrixTaskCardProps) {
 
         {totalSubtasks > 0 && (
           <div className="flex items-center gap-2 mt-2">
-            <div className="flex-1 h-1 bg-[rgba(70,66,60,0.5)] rounded-full overflow-hidden">
+            <div className="flex-1 h-1 bg-muted rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-foreground/50"
                 initial={{ width: 0 }}
@@ -89,7 +89,7 @@ export function MatrixTaskCard({ task, quadrant }: MatrixTaskCardProps) {
             {task.tags.slice(0, 2).map((tag) => (
               <span
                 key={tag}
-                className="px-1.5 py-0.5 text-xs bg-[rgba(70,66,60,0.5)] text-muted-foreground rounded"
+                className="px-1.5 py-0.5 text-xs bg-muted text-muted-foreground rounded"
               >
                 #{tag}
               </span>

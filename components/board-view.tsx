@@ -43,7 +43,7 @@ export function BoardView() {
             {/* Column Header */}
             <div className="flex items-center justify-between mb-3 px-1">
               <h3 className="text-sm font-medium text-foreground">{col.label}</h3>
-              <span className="text-xs text-muted-foreground bg-[rgba(70,66,60,0.5)] px-2 py-0.5 rounded-full">
+              <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
                 {columnTasks.length}
               </span>
             </div>
@@ -108,7 +108,7 @@ export function BoardView() {
                       </div>
 
                       {/* Quick status change */}
-                      <div className="flex items-center gap-1 mt-2 pt-2 border-t border-[rgba(120,112,100,0.15)]">
+                      <div className="flex items-center gap-1 mt-2 pt-2 border-t border-border">
                         {COLUMNS.filter((c) => c.status !== col.status).map((target) => (
                           <button
                             key={target.status}

@@ -77,11 +77,11 @@ export function SettingsPanel() {
     <>
       <Sheet>
         <SheetTrigger asChild>
-          <button className="p-2 rounded-lg hover:bg-[rgba(45,43,40,0.45)] text-muted-foreground hover:text-foreground transition-colors">
+          <button className="p-2 rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors">
             <Settings className="w-5 h-5" />
           </button>
         </SheetTrigger>
-        <SheetContent className="bg-[#1e1c1a] border-l border-[rgba(120,112,100,0.2)] w-[380px] sm:w-[420px] sm:max-w-[420px] overflow-y-auto px-5">
+        <SheetContent className="bg-background border-l border-border w-[380px] sm:w-[420px] sm:max-w-[420px] overflow-y-auto px-5">
           <SheetHeader>
             <SheetTitle className="text-foreground">Settings</SheetTitle>
           </SheetHeader>
@@ -101,10 +101,10 @@ export function SettingsPanel() {
                     value={settings.startupView}
                     onValueChange={(v) => updateSettings({ startupView: v as ViewType })}
                   >
-                    <SelectTrigger className="w-32 h-8 text-xs bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]">
+                    <SelectTrigger className="w-32 h-8 text-xs bg-secondary border-border">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-[#252320] border-[rgba(120,112,100,0.2)]">
+                    <SelectContent className="bg-popover border-border">
                       {viewOptions.map((opt) => (
                         <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
                       ))}
@@ -116,7 +116,7 @@ export function SettingsPanel() {
                   <button
                     onClick={() => updateSettings({ showCompletedTasks: !settings.showCompletedTasks })}
                     className={`w-10 h-5 rounded-full transition-colors relative ${
-                      settings.showCompletedTasks ? "bg-foreground" : "bg-[rgba(70,66,60,0.5)]"
+                      settings.showCompletedTasks ? "bg-foreground" : "bg-muted"
                     }`}
                   >
                     <div className={`w-4 h-4 rounded-full bg-background absolute top-0.5 transition-all ${
@@ -144,7 +144,7 @@ export function SettingsPanel() {
                   <button
                     onClick={() => updateSettings({ autoPriority: !settings.autoPriority })}
                     className={`w-10 h-5 rounded-full transition-colors relative ${
-                      settings.autoPriority ? "bg-foreground" : "bg-[rgba(70,66,60,0.5)]"
+                      settings.autoPriority ? "bg-foreground" : "bg-muted"
                     }`}
                   >
                     <div className={`w-4 h-4 rounded-full bg-background absolute top-0.5 transition-all ${
@@ -158,10 +158,10 @@ export function SettingsPanel() {
                     value={settings.defaultReminderMinutes.toString()}
                     onValueChange={(v) => updateSettings({ defaultReminderMinutes: parseInt(v) })}
                   >
-                    <SelectTrigger className="w-32 h-8 text-xs bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]">
+                    <SelectTrigger className="w-32 h-8 text-xs bg-secondary border-border">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-[#252320] border-[rgba(120,112,100,0.2)]">
+                    <SelectContent className="bg-popover border-border">
                       <SelectItem value="5">5 minutes</SelectItem>
                       <SelectItem value="10">10 minutes</SelectItem>
                       <SelectItem value="15">15 minutes</SelectItem>
@@ -190,7 +190,7 @@ export function SettingsPanel() {
                   <button
                     onClick={() => updateSettings({ autoAssignQuadrant: !settings.autoAssignQuadrant })}
                     className={`w-10 h-5 rounded-full transition-colors relative ${
-                      settings.autoAssignQuadrant ? "bg-foreground" : "bg-[rgba(70,66,60,0.5)]"
+                      settings.autoAssignQuadrant ? "bg-foreground" : "bg-muted"
                     }`}
                   >
                     <div className={`w-4 h-4 rounded-full bg-background absolute top-0.5 transition-all ${
@@ -202,7 +202,7 @@ export function SettingsPanel() {
                   variant="outline"
                   size="sm"
                   onClick={autoSortTasks}
-                  className="w-full bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)] gap-2 justify-start"
+                  className="w-full bg-secondary border-border hover:bg-secondary/80 gap-2 justify-start"
                 >
                   <Zap className="w-4 h-4" />
                   Re-sort all tasks now
@@ -229,7 +229,7 @@ export function SettingsPanel() {
                       updateSettings({ notificationsEnabled: !settings.notificationsEnabled })
                     }}
                     className={`w-10 h-5 rounded-full transition-colors relative ${
-                      settings.notificationsEnabled ? "bg-foreground" : "bg-[rgba(70,66,60,0.5)]"
+                      settings.notificationsEnabled ? "bg-foreground" : "bg-muted"
                     }`}
                   >
                     <div className={`w-4 h-4 rounded-full bg-background absolute top-0.5 transition-all ${
@@ -263,7 +263,7 @@ export function SettingsPanel() {
                     className={`text-xs ${
                       settings.googleCalendarConnected
                         ? "bg-foreground text-background hover:bg-foreground/90 border-transparent"
-                        : "bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)]"
+                        : "bg-secondary border-border hover:bg-secondary/80"
                     }`}
                   >
                     {settings.googleCalendarConnected ? "Disconnect" : "Connect"}
@@ -285,7 +285,7 @@ export function SettingsPanel() {
                   variant="outline"
                   size="sm"
                   onClick={handleExportData}
-                  className="w-full bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)] gap-2 justify-start"
+                  className="w-full bg-secondary border-border hover:bg-secondary/80 gap-2 justify-start"
                 >
                   <Download className="w-4 h-4" />
                   Export all data
@@ -309,7 +309,7 @@ export function SettingsPanel() {
                   variant="outline"
                   size="sm"
                   onClick={() => setShowDeleteConfirm(true)}
-                  className="w-full bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-red-500/10 gap-2 justify-start text-red-400 hover:text-red-400"
+                  className="w-full bg-secondary border-border hover:bg-red-500/10 gap-2 justify-start text-red-400 hover:text-red-400"
                 >
                   <Trash2 className="w-4 h-4" />
                   Delete all tasks
@@ -322,7 +322,7 @@ export function SettingsPanel() {
       </Sheet>
 
       <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
-        <AlertDialogContent className="bg-[#252320] border-[rgba(120,112,100,0.2)]">
+        <AlertDialogContent className="bg-popover border-border">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete all tasks?</AlertDialogTitle>
             <AlertDialogDescription>
@@ -330,7 +330,7 @@ export function SettingsPanel() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="bg-[rgba(55,52,48,0.5)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(70,66,60,0.5)]">
+            <AlertDialogCancel className="bg-secondary/80 border-border hover:bg-muted">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction

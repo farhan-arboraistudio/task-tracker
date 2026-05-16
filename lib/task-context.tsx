@@ -23,6 +23,7 @@ interface TaskContextType {
   updateSettings: (updates: Partial<Settings>) => void
   trackViewUsage: (view: ViewType) => void
   getMostUsedView: () => ViewType
+  isLoaded: boolean
 }
 
 const TaskContext = createContext<TaskContextType | null>(null)
@@ -400,6 +401,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         updateSettings,
         trackViewUsage,
         getMostUsedView,
+        isLoaded,
       }}
     >
       {children}

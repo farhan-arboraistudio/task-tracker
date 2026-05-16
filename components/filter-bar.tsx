@@ -104,7 +104,7 @@ export function FilterBar({
             value={filters.search}
             onChange={(e) => updateFilter("search", e.target.value)}
             placeholder="Search tasks..."
-            className="pl-9 bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] focus:border-foreground/40"
+            className="pl-9 bg-secondary border-border focus:border-foreground/40"
           />
           {filters.search && (
             <button
@@ -121,7 +121,7 @@ export function FilterBar({
           variant="outline"
           size="sm"
           onClick={() => setShowAdvanced(!showAdvanced)}
-          className={`bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)] gap-2 ${
+          className={`bg-secondary border-border hover:bg-secondary/80 gap-2 ${
             activeFilterCount > 0 ? "text-foreground" : ""
           }`}
         >
@@ -146,7 +146,7 @@ export function FilterBar({
             className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
               filters.dateRange === qf.value
                 ? "bg-foreground text-background"
-                : "bg-[rgba(45,43,40,0.45)] text-muted-foreground hover:text-foreground hover:bg-[rgba(55,52,48,0.5)]"
+                : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80"
             }`}
           >
             {qf.label}
@@ -158,7 +158,7 @@ export function FilterBar({
           className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
             filters.hideCompleted
               ? "bg-foreground text-background"
-              : "bg-[rgba(45,43,40,0.45)] text-muted-foreground hover:text-foreground hover:bg-[rgba(55,52,48,0.5)]"
+              : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80"
           }`}
         >
           Hide Completed
@@ -189,11 +189,11 @@ export function FilterBar({
                 value={filters.priority}
                 onValueChange={(v) => updateFilter("priority", v as Priority | "all")}
               >
-                <SelectTrigger className="w-auto bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] h-8 text-xs">
+                <SelectTrigger className="w-auto bg-secondary border-border h-8 text-xs">
                   <Flag className="w-3 h-3 mr-1" />
                   <SelectValue placeholder="Priority" />
                 </SelectTrigger>
-                <SelectContent className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]">
+                <SelectContent className="bg-secondary border-border">
                   <SelectItem value="all">All Priorities</SelectItem>
                   {Object.entries(PRIORITY_INFO).map(([value, info]) => (
                     <SelectItem key={value} value={value}>
@@ -211,11 +211,11 @@ export function FilterBar({
                 value={filters.status}
                 onValueChange={(v) => updateFilter("status", v as Status | "all")}
               >
-                <SelectTrigger className="w-auto bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] h-8 text-xs">
+                <SelectTrigger className="w-auto bg-secondary border-border h-8 text-xs">
                   <CheckSquare className="w-3 h-3 mr-1" />
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
-                <SelectContent className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]">
+                <SelectContent className="bg-secondary border-border">
                   <SelectItem value="all">All Statuses</SelectItem>
                   {Object.entries(STATUS_INFO).map(([value, info]) => (
                     <SelectItem key={value} value={value}>
@@ -230,11 +230,11 @@ export function FilterBar({
                 value={filters.dateRange}
                 onValueChange={(v) => updateFilter("dateRange", v as FilterState["dateRange"])}
               >
-                <SelectTrigger className="w-auto bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] h-8 text-xs">
+                <SelectTrigger className="w-auto bg-secondary border-border h-8 text-xs">
                   <Calendar className="w-3 h-3 mr-1" />
                   <SelectValue placeholder="Date" />
                 </SelectTrigger>
-                <SelectContent className="bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]">
+                <SelectContent className="bg-secondary border-border">
                   <SelectItem value="all">All Dates</SelectItem>
                   <SelectItem value="today">Today</SelectItem>
                   <SelectItem value="week">This Week</SelectItem>
@@ -250,7 +250,7 @@ export function FilterBar({
                     <Button
                       variant="outline"
                       size="sm"
-                      className="h-8 bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)] text-xs"
+                      className="h-8 bg-secondary border-border hover:bg-secondary/80 text-xs"
                     >
                       <Tag className="w-3 h-3 mr-1" />
                       Tags
@@ -261,7 +261,7 @@ export function FilterBar({
                       )}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-48 p-2 bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]" align="start">
+                  <PopoverContent className="w-48 p-2 bg-secondary border-border" align="start">
                     <div className="space-y-1 max-h-48 overflow-y-auto">
                       {availableTags.map((tag) => (
                         <button
@@ -270,7 +270,7 @@ export function FilterBar({
                           className={`w-full text-left px-2 py-1.5 text-xs rounded transition-colors ${
                             filters.tags.includes(tag)
                               ? "bg-foreground text-background"
-                              : "text-muted-foreground hover:bg-[rgba(55,52,48,0.5)] hover:text-foreground"
+                              : "text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
                           }`}
                         >
                           #{tag}
@@ -287,13 +287,13 @@ export function FilterBar({
                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-8 bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)] hover:bg-[rgba(55,52,48,0.5)] text-xs"
+                    className="h-8 bg-secondary border-border hover:bg-secondary/80 text-xs"
                   >
                     <ArrowUpDown className="w-3 h-3 mr-1" />
                     Sort
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-40 p-2 bg-[rgba(45,43,40,0.45)] border-[rgba(120,112,100,0.2)]" align="start">
+                <PopoverContent className="w-40 p-2 bg-secondary border-border" align="start">
                   <div className="space-y-1">
                     {[
                       { field: "dueDate" as SortField, label: "Due Date" },
@@ -307,7 +307,7 @@ export function FilterBar({
                         className={`w-full text-left px-2 py-1.5 text-xs rounded transition-colors flex items-center justify-between ${
                           sortField === field
                             ? "bg-foreground text-background"
-                            : "text-muted-foreground hover:bg-[rgba(55,52,48,0.5)] hover:text-foreground"
+                            : "text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
                         }`}
                       >
                         {label}
