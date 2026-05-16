@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { ChevronDown, ChevronRight, Pencil, Bell, Repeat, GripVertical, Flag, Calendar as CalendarIcon, Trash2, ArrowRight } from "lucide-react"
+import { ChevronDown, ChevronRight, Pencil, Bell, Repeat, GripVertical, Flag, Calendar as CalendarIcon, Trash2, ArrowRight, Link2, Plus, X } from "lucide-react"
 import { useTasks } from "@/lib/task-context"
 import type { Task, Status, Priority } from "@/lib/types"
 import { PRIORITY_INFO, STATUS_INFO, QUADRANT_INFO, getPriorityInfo } from "@/lib/types"
@@ -391,14 +391,51 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
                 )}
 
                 <SubtaskList task={task} />
-                
-                {/* Links */}
-                {task.links && (
-                  <div className="mt-3 text-sm text-muted-foreground break-all">
-                    <span className="text-foreground font-medium mr-2">Links:</span>
-                    <a href={task.links.startsWith('http') ? task.links : `https://${task.links}`} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">{task.links}</a>
+                {/* Links Section */}
+                <div className="mt-4 pt-3 border-t border-[rgba(120,112,100,0.1)]">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Link2 className="w-3.5 h-3.5 text-muted-foreground" />
+                    <span className="text-xs font-medium text-muted-foreground">Link</span>
                   </div>
-                )}
+                  
+                  {task.links ? (
+                    <div className="flex items-center justify-between group/link bg-secondary/30 rounded p-1.5 pl-2">
+                      <a 
+                        href={task.links.startsWith('http') ? task.links : `https://${task.links}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-sm text-blue-400 hover:underline truncate pr-4"
+                      >
+                        {task.links}
+                      </a>
+                      <button 
+                        onClick={() => updateTask(task.id, { links: "" })}
+                        className="opacity-0 group-hover/link:opacity-100 p-1 rounded hover:bg-muted text-muted-foreground hover:text-red-400 transition-opacity flex-shrink-0"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <Plus className="w-3.5 h-3.5 text-muted-foreground ml-1" />
+                      <input
+                        type="url"
+                        placeholder="Add a link..."
+                        className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none py-1"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && e.currentTarget.value.trim()) {
+                            updateTask(task.id, { links: e.currentTarget.value.trim() })
+                          }
+                        }}
+                        onBlur={(e) => {
+                          if (e.currentTarget.value.trim()) {
+                            updateTask(task.id, { links: e.currentTarget.value.trim() })
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </motion.div>
           )}
