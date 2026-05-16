@@ -119,33 +119,14 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
             )}
           </button>
 
-          {/* Status Checkbox */}
-          <button
-            onClick={() =>
-              handleStatusChange(task.status === "done" ? "todo" : "done")
-            }
-            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
-              task.status === "done"
-                ? "bg-foreground border-foreground"
-                : "border-muted-foreground hover:border-foreground"
+          {/* Due Date */}
+          <span
+            className={`text-xs min-w-[80px] ${
+              isOverdue ? "text-red-400" : "text-muted-foreground"
             }`}
           >
-            {task.status === "done" && (
-              <svg
-                className="w-3 h-3 text-background"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={3}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            )}
-          </button>
+            {formatDueDate(task.dueDate)}
+          </span>
 
           {/* Task Title (Clickable area) */}
           <div 
@@ -227,14 +208,33 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
             ))}
           </select>
 
-          {/* Due Date */}
-          <span
-            className={`hidden sm:block text-xs min-w-[80px] text-right ${
-              isOverdue ? "text-red-400" : "text-muted-foreground"
+          {/* Status Checkbox (To Do Toggle) */}
+          <button
+            onClick={() =>
+              handleStatusChange(task.status === "done" ? "todo" : "done")
+            }
+            className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-colors ${
+              task.status === "done"
+                ? "bg-foreground border-foreground"
+                : "border-muted-foreground hover:border-foreground"
             }`}
           >
-            {formatDueDate(task.dueDate)}
-          </span>
+            {task.status === "done" && (
+              <svg
+                className="w-3 h-3 text-background"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={3}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            )}
+          </button>
 
           {/* Priority Indicator */}
           <div

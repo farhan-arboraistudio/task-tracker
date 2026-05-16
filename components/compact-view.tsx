@@ -70,21 +70,16 @@ export function CompactView() {
                   task.status === "done" ? "opacity-50" : ""
                 }`}
               >
-                {/* Checkbox */}
-                <button
-                  onClick={() =>
-                    updateStatus(task.id, task.status === "done" ? "todo" : "done")
-                  }
-                  className={`w-4 h-4 rounded-full border flex-shrink-0 flex items-center justify-center transition-colors ${
-                    task.status === "done"
-                      ? "bg-foreground border-foreground"
-                      : "border-muted-foreground hover:border-foreground"
-                  }`}
-                >
-                  {task.status === "done" && (
-                    <CheckCircle2 className="w-3 h-3 text-background" />
-                  )}
-                </button>
+                {/* Due Date (Compact) */}
+                {task.dueDate && (
+                  <span
+                    className={`text-[10px] min-w-[50px] ${
+                      isOverdue ? "text-red-400" : "text-muted-foreground"
+                    }`}
+                  >
+                    {format(new Date(task.dueDate), "MMM d")}
+                  </span>
+                )}
 
                 {/* Priority dot */}
                 <div
@@ -102,16 +97,21 @@ export function CompactView() {
                   {task.title}
                 </span>
 
-                {/* Due date */}
-                {task.dueDate && (
-                  <span
-                    className={`text-[11px] flex-shrink-0 ${
-                      isOverdue ? "text-red-400" : "text-muted-foreground"
-                    }`}
-                  >
-                    {formatDueDate(task.dueDate)}
-                  </span>
-                )}
+                {/* Checkbox (Toggle) */}
+                <button
+                  onClick={() =>
+                    updateStatus(task.id, task.status === "done" ? "todo" : "done")
+                  }
+                  className={`w-4 h-4 rounded-full border flex-shrink-0 flex items-center justify-center transition-colors ${
+                    task.status === "done"
+                      ? "bg-foreground border-foreground"
+                      : "border-muted-foreground hover:border-foreground"
+                  }`}
+                >
+                  {task.status === "done" && (
+                    <CheckCircle2 className="w-3 h-3 text-background" />
+                  )}
+                </button>
               </div>
             )
           })
