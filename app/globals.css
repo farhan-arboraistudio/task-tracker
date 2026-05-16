@@ -1,0 +1,158 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Gray vintage dark theme */
+  --background: #1a1a1a;
+  --foreground: #e0dcd4;
+  --card: rgba(45, 43, 40, 0.55);
+  --card-foreground: #e0dcd4;
+  --popover: #252320;
+  --popover-foreground: #e0dcd4;
+  --primary: #d4cfc6;
+  --primary-foreground: #1a1a1a;
+  --secondary: rgba(55, 52, 48, 0.6);
+  --secondary-foreground: #d4cfc6;
+  --muted: rgba(55, 52, 48, 0.6);
+  --muted-foreground: #9a9488;
+  --accent: #302e2a;
+  --accent-foreground: #e0dcd4;
+  --destructive: #c45c5c;
+  --destructive-foreground: #faf0e6;
+  --border: rgba(120, 112, 100, 0.25);
+  --input: rgba(50, 47, 43, 0.5);
+  --ring: rgba(160, 152, 140, 0.4);
+  --chart-1: #7b9bb5;
+  --chart-2: #8ab59b;
+  --chart-3: #c4a85a;
+  --chart-4: #9b85b5;
+  --chart-5: #b57b7b;
+  --radius: 0.75rem;
+  
+  /* Priority colors - muted vintage */
+  --urgent: #c45c5c;
+  --high: #c4a85a;
+  --medium: #7b9bb5;
+  --low: #8a8680;
+  
+  /* Quadrant colors - muted vintage */
+  --do-first: #c45c5c;
+  --schedule: #7b9bb5;
+  --delegate: #c4a85a;
+  --eliminate: #8a8680;
+
+  /* Glassmorphism tokens */
+  --glass-bg: rgba(45, 43, 40, 0.45);
+  --glass-bg-hover: rgba(60, 57, 52, 0.55);
+  --glass-border: rgba(120, 112, 100, 0.2);
+  --glass-blur: 16px;
+  --glass-glow: rgba(210, 205, 195, 0.04);
+  --glass-glow-hover: rgba(210, 205, 195, 0.08);
+}
+
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  
+  /* Priority colors */
+  --color-urgent: var(--urgent);
+  --color-high: var(--high);
+  --color-medium: var(--medium);
+  --color-low: var(--low);
+  
+  /* Quadrant colors */
+  --color-do-first: var(--do-first);
+  --color-schedule: var(--schedule);
+  --color-delegate: var(--delegate);
+  --color-eliminate: var(--eliminate);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply text-foreground;
+    background: #1a1a1a;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(80, 70, 55, 0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 85%, rgba(60, 75, 85, 0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(90, 80, 65, 0.08) 0%, transparent 50%);
+    min-height: 100vh;
+  }
+}
+
+/* ---- Glassmorphism Utility Classes ---- */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.glass-hover:hover {
+  background: var(--glass-bg-hover);
+  box-shadow: 0 8px 32px var(--glass-glow-hover), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.glass-input {
+  background: rgba(35, 33, 30, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(120, 112, 100, 0.15);
+}
+
+.glass-input:focus {
+  border-color: rgba(160, 152, 140, 0.35);
+  box-shadow: 0 0 0 2px rgba(160, 152, 140, 0.1);
+}
+
+.glass-panel {
+  background: rgba(35, 33, 30, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(120, 112, 100, 0.15);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* Vintage noise texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
