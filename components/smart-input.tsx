@@ -164,7 +164,7 @@ export function SmartInput() {
 
                           {/* Date */}
                           {parsedTask.dueDate && (
-                            <span className="flex items-center gap-1 text-xs px-2 py-1 bg-secondary/80 text-blue-400 rounded">
+                            <span className="flex items-center gap-1 text-xs px-2 py-1 bg-secondary/80 text-teal-500 rounded">
                               <Calendar className="w-3 h-3" />
                               {formatDueDate(parsedTask.dueDate)}
                             </span>
@@ -175,12 +175,12 @@ export function SmartInput() {
                             <span
                             className={`flex items-center gap-1 text-xs px-2 py-1 bg-secondary/80 rounded ${
                               parsedTask.priority === "urgent"
-                                ? "text-red-400"
+                                ? "text-red-500"
                                 : parsedTask.priority === "high"
-                                ? "text-amber-400"
+                                ? "text-amber-500"
                                 : parsedTask.priority === "medium"
-                                ? "text-blue-400"
-                                : "text-gray-400"
+                                ? "text-blue-500"
+                                : "text-gray-500"
                             }`}
                           >
                             <Flag className="w-3 h-3" />

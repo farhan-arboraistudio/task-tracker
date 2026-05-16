@@ -298,6 +298,45 @@ export function SettingsPanel() {
 
             <div className="h-px bg-[rgba(120,112,100,0.15)]" />
 
+            {/* ---- Developer Tools ---- */}
+            <section className="space-y-3">
+              <h3 className="text-sm font-medium text-foreground flex items-center gap-2">
+                <Zap className="w-4 h-4 text-muted-foreground" />
+                Developer Tools
+              </h3>
+              <div className="space-y-2 pl-6">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const mockTasks = Array.from({ length: 25 }).map((_, i) => ({
+                      id: `mock-${Date.now()}-${i}`,
+                      title: `Mock Task ${i + 1}`,
+                      dueDate: new Date(Date.now() + (Math.random() * 10 - 5) * 86400000), // Random date +/- 5 days
+                      priority: ["urgent", "high", "medium", "low"][Math.floor(Math.random() * 4)] as any,
+                      status: ["todo", "in-progress", "done"][Math.floor(Math.random() * 3)] as any,
+                      quadrant: ["do-first", "schedule", "delegate", "eliminate", null][Math.floor(Math.random() * 5)] as any,
+                      tags: ["mock", ["work", "personal", "health"][Math.floor(Math.random() * 3)]],
+                      subtasks: [],
+                      createdAt: new Date(),
+                      updatedAt: new Date(),
+                    }))
+                    localStorage.setItem("task-tracker-tasks", JSON.stringify([...tasks, ...mockTasks]))
+                    window.location.reload()
+                  }}
+                  className="w-full bg-secondary border-border hover:bg-secondary/80 gap-2 justify-start"
+                >
+                  <Zap className="w-4 h-4" />
+                  Generate 25 Mock Tasks
+                </Button>
+                <p className="text-[11px] text-muted-foreground/60">
+                  Adds random tasks to test performance and scrolling. Reloads the page.
+                </p>
+              </div>
+            </section>
+
+            <div className="h-px bg-[rgba(120,112,100,0.15)]" />
+
             {/* ---- Danger Zone ---- */}
             <section className="space-y-3">
               <h3 className="text-sm font-medium text-red-400/80 flex items-center gap-2">

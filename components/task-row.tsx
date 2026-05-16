@@ -18,9 +18,12 @@ import { format } from "date-fns"
 interface TaskRowProps {
   task: Task
   isDragging?: boolean
+  isSelectionMode?: boolean
+  isSelected?: boolean
+  onToggleSelect?: (id: string) => void
 }
 
-export function TaskRow({ task, isDragging }: TaskRowProps) {
+export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggleSelect }: TaskRowProps) {
   const { updateStatus, updateTask, deleteTask } = useTasks()
   const [isExpanded, setIsExpanded] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
@@ -93,6 +96,16 @@ export function TaskRow({ task, isDragging }: TaskRowProps) {
           >
             <GripVertical className="w-4 h-4 text-muted-foreground" />
           </div>
+
+          {/* Selection Checkbox (if in selection mode) */}
+          {isSelectionMode && (
+            <input
+              type="checkbox"
+              checked={isSelected}
+              onChange={() => onToggleSelect?.(task.id)}
+              className="w-4 h-4 rounded border-[rgba(120,112,100,0.4)] bg-[rgba(45,43,40,0.5)] focus:ring-1 focus:ring-foreground accent-foreground cursor-pointer"
+            />
+          )}
 
           {/* Expand Button */}
           <button

@@ -15,7 +15,7 @@ import {
 } from "date-fns"
 
 export function TaskList() {
-  const { tasks, settings } = useTasks()
+  const { tasks, settings, updateStatus, deleteTask } = useTasks()
   const [filters, setFilters] = useState<FilterState>({
     search: "",
     priority: "all",
@@ -25,6 +25,10 @@ export function TaskList() {
   })
   const [sortField, setSortField] = useState<SortField>("dueDate")
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc")
+
+  // Bulk Selection State
+  const [isSelectionMode, setIsSelectionMode] = useState(false)
+  const [selectedTaskIds, setSelectedTaskIds] = useState<Set<string>>(new Set())
 
   const availableTags = useMemo(() => {
     const tagSet = new Set<string>()
@@ -144,7 +148,68 @@ export function TaskList() {
             )}
           </p>
         </div>
+        <button
+          onClick={() => {
+            setIsSelectionMode(!isSelectionMode)
+            setSelectedTaskIds(new Set())
+          }}
+          className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
+            isSelectionMode ? "bg-foreground text-background" : "bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          {isSelectionMode ? "Cancel" : "Select Tasks"}
+        </button>
       </div>
+
+      {isSelectionMode && (
+        <div className="flex items-center justify-between bg-secondary/50 p-2 rounded-xl text-sm mb-4">
+          <div className="flex items-center gap-3 pl-2">
+            <input
+              type="checkbox"
+              onChange={() => {
+                if (selectedTaskIds.size === filteredAndSortedTasks.length) {
+                  setSelectedTaskIds(new Set())
+                } else {
+                  setSelectedTaskIds(new Set(filteredAndSortedTasks.map(t => t.id)))
+                }
+              }}
+              checked={selectedTaskIds.size === filteredAndSortedTasks.length && filteredAndSortedTasks.length > 0}
+              className="w-4 h-4 rounded border-border focus:ring-1 focus:ring-foreground accent-foreground cursor-pointer"
+            />
+            <span className="text-muted-foreground text-xs">{selectedTaskIds.size} selected</span>
+          </div>
+          <div className="flex items-center gap-2 pr-2">
+            <button
+              onClick={() => {
+                selectedTaskIds.forEach((id) => {
+                  const task = tasks.find(t => t.id === id)
+                  if (task && task.status !== "done") {
+                    updateStatus(id, "done")
+                  }
+                })
+                setSelectedTaskIds(new Set())
+                setIsSelectionMode(false)
+              }}
+              disabled={selectedTaskIds.size === 0}
+              className="text-xs text-green-500 hover:text-green-600 disabled:opacity-50"
+            >
+              Mark Done
+            </button>
+            <span className="text-border">|</span>
+            <button
+              onClick={() => {
+                selectedTaskIds.forEach(id => deleteTask(id))
+                setSelectedTaskIds(new Set())
+                setIsSelectionMode(false)
+              }}
+              disabled={selectedTaskIds.size === 0}
+              className="text-xs text-red-500 hover:text-red-600 disabled:opacity-50"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Filters */}
       <FilterBar
@@ -200,7 +265,22 @@ export function TaskList() {
               )}
             </motion.div>
           ) : (
-            filteredAndSortedTasks.map((task) => <TaskRow key={task.id} task={task} />)
+            filteredAndSortedTasks.map((task) => (
+              <TaskRow
+                key={task.id}
+                task={task}
+                isSelectionMode={isSelectionMode}
+                isSelected={selectedTaskIds.has(task.id)}
+                onToggleSelect={(id) => {
+                  setSelectedTaskIds((prev) => {
+                    const newSet = new Set(prev)
+                    if (newSet.has(id)) newSet.delete(id)
+                    else newSet.add(id)
+                    return newSet
+                  })
+                }}
+              />
+            ))
           )}
         </SortableContext>
       </div>

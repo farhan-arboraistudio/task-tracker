@@ -301,6 +301,21 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
                 <Plus className="w-4 h-4" />
               </Button>
             </div>
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              <span className="text-xs text-muted-foreground mr-1 self-center">Presets:</span>
+              {["work", "personal", "health", "errands"].map((preset) => (
+                <button
+                  key={preset}
+                  type="button"
+                  onClick={() => {
+                    if (!tags.includes(preset)) setTags([...tags, preset])
+                  }}
+                  className="px-2 py-0.5 text-xs bg-[rgba(60,57,52,0.4)] text-muted-foreground hover:text-foreground rounded transition-colors"
+                >
+                  {preset}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Description */}

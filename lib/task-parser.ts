@@ -51,21 +51,43 @@ export function parseTaskInput(input: string): ParsedTask {
   // Then extract priority
   const { priority, cleanedText: textWithoutPriority, isExplicit: isPriorityExplicit } = extractPriority(textWithoutTags)
 
+  // Pre-process common shorthands and invalid times before chrono
+  let preProcessedText = textWithoutPriority
+    .replace(/\btom\b/gi, "tomorrow")
+    .replace(/\btod\b/gi, "today")
+    // Replace something like "13pm" or "14pm" with "13:00" or "14:00"
+    .replace(/\b([0-9]{2})\s*pm\b/gi, (match, hour) => {
+      const h = parseInt(hour, 10)
+      if (h > 12 && h <= 24) {
+        return `${h}:00`
+      }
+      return match
+    })
+
   // Parse date with chrono (using casual parser directly)
-  const parsedDate = chrono.parse(textWithoutPriority, new Date(), {
+  const parsedDate = chrono.parse(preProcessedText, new Date(), {
     forwardDate: true,
   })
 
   let dueDate: Date | null = null
-  let title = textWithoutPriority
+  let title = textWithoutPriority // Use original text for title to preserve user's actual input if no date is found
 
   if (parsedDate.length > 0) {
     const firstResult = parsedDate[0]
     dueDate = firstResult.start.date()
 
     // Remove the date text from the title
-    const dateText = firstResult.text
-    title = title.replace(dateText, "").trim()
+    // We need to remove the matched date text from the *original* text without priority.
+    // However, since chrono matched against preProcessedText, its text output might be "tomorrow" instead of "tom".
+    // We can just remove the exact string `firstResult.text` if it exists, or remove the word based on index.
+    // To be safe and simple, we'll strip known shorthands too if the parsed text is exactly that.
+    title = title
+      .replace(firstResult.text, "")
+      .replace(/\btom\b/gi, "")
+      .replace(/\btod\b/gi, "")
+      // also replace the matched time if it was 13pm etc.
+      .replace(/\b([0-9]{2})\s*pm\b/gi, "")
+      .trim()
   }
 
   // Clean up extra spaces
