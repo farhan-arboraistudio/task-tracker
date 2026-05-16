@@ -127,6 +127,10 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
             onClick={() => setIsExpanded(!isExpanded)}
           >
             <div className="flex items-center gap-2 flex-wrap">
+              <div
+                className={`w-2 h-2 rounded-full flex-shrink-0 ${priorityInfo.color}`}
+                title={priorityInfo.label}
+              />
               <span
                 className={`text-sm break-words ${
                   task.status === "done"
@@ -186,21 +190,6 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
             )}
           </div>
 
-          {/* Status Badge */}
-          <select
-            value={task.status}
-            onChange={(e) => handleStatusChange(e.target.value as Status)}
-            className={`hidden sm:block text-xs font-medium px-2 py-1 rounded-md appearance-none cursor-pointer transition-colors focus:outline-none w-[90px] text-center ${
-              STATUS_INFO[task.status].bgColor
-            } ${STATUS_INFO[task.status].color} hover:opacity-80`}
-          >
-            {Object.entries(STATUS_INFO).map(([value, info]) => (
-              <option key={value} value={value} className="bg-popover text-foreground">
-                {info.label}
-              </option>
-            ))}
-          </select>
-
           {/* Due Date */}
           <span
             className={`hidden sm:block text-xs min-w-[80px] text-right ${
@@ -237,12 +226,6 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
               </svg>
             )}
           </button>
-
-          {/* Priority Indicator */}
-          <div
-            className={`w-2 h-2 rounded-full ${priorityInfo.color}`}
-            title={priorityInfo.label}
-          />
 
           {/* Actions */}
           <div className="flex items-center gap-1 min-w-[64px] justify-end">

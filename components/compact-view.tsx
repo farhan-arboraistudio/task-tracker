@@ -95,7 +95,7 @@ export function CompactView() {
                       isOverdue ? "text-red-400" : "text-muted-foreground"
                     }`}
                   >
-                    {format(new Date(task.dueDate), "MMM d")}
+                    {formatDueDate(task.dueDate)}
                   </span>
                 )}
 
