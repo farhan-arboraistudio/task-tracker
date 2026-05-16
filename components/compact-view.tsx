@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react"
 import { motion } from "framer-motion"
 import { useTasks } from "@/lib/task-context"
-import { PRIORITY_INFO, STATUS_INFO } from "@/lib/types"
+import { PRIORITY_INFO, STATUS_INFO, getPriorityInfo } from "@/lib/types"
 import type { FilterState, Task } from "@/lib/types"
 import { formatDueDate } from "@/lib/task-parser"
 import { isToday, isThisWeek, isBefore, startOfDay } from "date-fns"
@@ -58,7 +58,7 @@ export function CompactView() {
           </div>
         ) : (
           sortedTasks.map((task) => {
-            const priorityInfo = PRIORITY_INFO[task.priority]
+            const priorityInfo = getPriorityInfo(task.priority, settings)
             const isOverdue =
               task.dueDate &&
               new Date(task.dueDate) < new Date() &&

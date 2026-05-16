@@ -27,7 +27,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import type { Priority, Status, SortField, SortDirection, FilterState } from "@/lib/types"
-import { PRIORITY_INFO, STATUS_INFO } from "@/lib/types"
+import { PRIORITY_INFO, STATUS_INFO, getPriorityInfo } from "@/lib/types"
 import { useTasks } from "@/lib/task-context"
 
 interface FilterBarProps {
@@ -197,14 +197,17 @@ export function FilterBar({
                 </SelectTrigger>
                 <SelectContent className="bg-secondary border-border">
                   <SelectItem value="all">All Priorities</SelectItem>
-                  {Object.entries(PRIORITY_INFO).map(([value, info]) => (
-                    <SelectItem key={value} value={value}>
-                      <span className="flex items-center gap-2">
-                        <span className={`w-2 h-2 rounded-full ${info.color}`} />
-                        {info.label}
-                      </span>
-                    </SelectItem>
-                  ))}
+                  {(Object.keys(PRIORITY_INFO) as Priority[]).map((value) => {
+                    const info = getPriorityInfo(value, settings)
+                    return (
+                      <SelectItem key={value} value={value}>
+                        <span className="flex items-center gap-2">
+                          <span className={`w-2 h-2 rounded-full ${info.color}`} />
+                          {info.label}
+                        </span>
+                      </SelectItem>
+                    )
+                  })}
                 </SelectContent>
               </Select>
 

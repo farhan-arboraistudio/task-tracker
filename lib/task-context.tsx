@@ -15,6 +15,7 @@ interface TaskContextType {
   toggleSubtask: (taskId: string, subtaskId: string) => void
   deleteSubtask: (taskId: string, subtaskId: string) => void
   moveToQuadrant: (taskId: string, quadrant: Quadrant) => void
+  reorderTask: (activeId: string, overId: string) => void
   updateStatus: (taskId: string, status: Status) => void
   duplicateTask: (taskId: string) => void
   carryForward: (taskId: string) => void
@@ -304,6 +305,39 @@ export function TaskProvider({ children }: { children: ReactNode }) {
     )
   }, [])
 
+  const reorderTask = useCallback((activeId: string, overId: string) => {
+    setTasks((prev) => {
+      const activeIndex = prev.findIndex((t) => t.id === activeId)
+      const overIndex = prev.findIndex((t) => t.id === overId)
+      
+      if (activeIndex === -1 || overIndex === -1 || activeIndex === overIndex) return prev
+      
+      const newTasks = [...prev]
+      const [activeTask] = newTasks.splice(activeIndex, 1)
+      const overTask = prev[overIndex]
+      
+      // Update quadrant and priority if moving to a different quadrant
+      if (activeTask.quadrant !== overTask.quadrant) {
+        activeTask.quadrant = overTask.quadrant
+        if (overTask.quadrant) {
+          activeTask.priority = syncPriorityWithQuadrant(overTask.quadrant, activeTask.priority)
+        }
+        activeTask.updatedAt = new Date()
+      }
+      
+      // Insert at the new index (which might have shifted due to the splice)
+      const newOverIndex = newTasks.findIndex((t) => t.id === overId)
+      
+      // Determine if we are moving down or up to place it correctly
+      // In a sorted list, we typically insert after if moving down, before if moving up
+      // but simply inserting at the newOverIndex places it before the overTask
+      const insertIndex = activeIndex < overIndex ? newOverIndex + 1 : newOverIndex
+      newTasks.splice(insertIndex, 0, activeTask)
+      
+      return newTasks
+    })
+  }, [])
+
   const updateStatus = useCallback((taskId: string, status: Status) => {
     setTasks((prev) =>
       prev.map((task) =>
@@ -412,6 +446,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         toggleSubtask,
         deleteSubtask,
         moveToQuadrant,
+        reorderTask,
         updateStatus,
         duplicateTask,
         carryForward,

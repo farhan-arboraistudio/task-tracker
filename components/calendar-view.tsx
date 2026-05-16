@@ -17,8 +17,8 @@ import {
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react"
 import { useTasks } from "@/lib/task-context"
-import type { Task } from "@/lib/types"
-import { PRIORITY_INFO } from "@/lib/types"
+import type { Task, Settings } from "@/lib/types"
+import { PRIORITY_INFO, getPriorityInfo } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import { TaskEditDialog } from "./task-edit-dialog"
 
@@ -30,9 +30,10 @@ interface DayProps {
   isCurrentMonth: boolean
   isSelected: boolean
   onSelect: () => void
+  settings: Settings
 }
 
-function DayCell({ date, tasks, isCurrentMonth, isSelected, onSelect }: DayProps) {
+function DayCell({ date, tasks, isCurrentMonth, isSelected, onSelect, settings }: DayProps) {
   const today = isToday(date)
   const overdueTasks = tasks.filter(
     (t) => t.dueDate && new Date(t.dueDate) < new Date() && t.status !== "done"
@@ -62,7 +63,7 @@ function DayCell({ date, tasks, isCurrentMonth, isSelected, onSelect }: DayProps
       </span>
       <div className="flex-1 space-y-0.5 overflow-hidden">
         {tasks.slice(0, 3).map((task) => {
-          const priorityInfo = PRIORITY_INFO[task.priority]
+          const priorityInfo = getPriorityInfo(task.priority, settings)
           const isOverdue = overdueTasks.some((t) => t.id === task.id)
           return (
             <div
@@ -99,7 +100,7 @@ interface DayDetailPanelProps {
 }
 
 function DayDetailPanel({ date, tasks, onClose }: DayDetailPanelProps) {
-  const { updateStatus } = useTasks()
+  const { updateStatus, settings } = useTasks()
   const [editingTask, setEditingTask] = useState<Task | null>(null)
 
   const sortedTasks = useMemo(() => {
@@ -158,7 +159,7 @@ function DayDetailPanel({ date, tasks, onClose }: DayDetailPanelProps) {
           </div>
         ) : (
           sortedTasks.map((task) => {
-            const priorityInfo = PRIORITY_INFO[task.priority]
+            const priorityInfo = getPriorityInfo(task.priority, settings)
             const isOverdue =
               task.dueDate &&
               new Date(task.dueDate) < new Date() &&
@@ -408,25 +409,22 @@ export function CalendarView() {
                 isCurrentMonth={isSameMonth(day, currentDate)}
                 isSelected={selectedDate ? isSameDay(day, selectedDate) : false}
                 onSelect={() => setSelectedDate(day)}
+                settings={settings}
               />
             )
           })}
         </div>
 
         {/* Legend */}
-        <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2">
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-red-500" /> Urgent
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-amber-500" /> High
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-blue-500" /> Medium
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-gray-500" /> Low
-          </span>
+        <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground pt-2">
+          {(["urgent", "high", "medium", "low"] as const).map((priority) => {
+            const info = getPriorityInfo(priority, settings)
+            return (
+              <span key={priority} className="flex items-center gap-1">
+                <span className={`w-2 h-2 rounded-full ${info.color}`} /> {info.label}
+              </span>
+            )
+          })}
         </div>
       </div>
 

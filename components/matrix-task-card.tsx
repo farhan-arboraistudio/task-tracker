@@ -5,7 +5,7 @@ import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { GripVertical, Clock } from "lucide-react"
 import type { Task, Quadrant } from "@/lib/types"
-import { PRIORITY_INFO } from "@/lib/types"
+import { getPriorityInfo } from "@/lib/types"
 import { formatDueDate } from "@/lib/task-parser"
 
 interface MatrixTaskCardProps {
@@ -28,7 +28,6 @@ export function MatrixTaskCard({ task, quadrant }: MatrixTaskCardProps) {
     transition,
   }
 
-  const priorityInfo = PRIORITY_INFO[task.priority]
   const isOverdue = task.dueDate && new Date(task.dueDate) < new Date()
 
   const completedSubtasks = task.subtasks.filter((s) => s.completed).length
@@ -51,9 +50,6 @@ export function MatrixTaskCard({ task, quadrant }: MatrixTaskCardProps) {
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2">
           <p className="text-sm text-foreground truncate">{task.title}</p>
-          <div
-            className={`w-2 h-2 rounded-full flex-shrink-0 mt-1.5 ${priorityInfo.color}`}
-          />
         </div>
 
         <div className="flex items-center gap-2 mt-1.5">

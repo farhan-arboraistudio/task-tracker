@@ -51,6 +51,7 @@ export interface Settings {
   startupView: ViewType
   showCompletedTasks: boolean
   compactMode: boolean
+  customPriorityColors?: Partial<Record<Priority, string>>
 }
 
 export interface ParsedTask {
@@ -112,6 +113,29 @@ export const PRIORITY_INFO: Record<Priority, { label: string; color: string }> =
   high: { label: "High", color: "bg-amber-500" },
   medium: { label: "Medium", color: "bg-blue-500" },
   low: { label: "Low", color: "bg-gray-500" },
+}
+
+export const PRIORITY_COLOR_OPTIONS = [
+  "bg-red-500",
+  "bg-amber-500",
+  "bg-emerald-500",
+  "bg-blue-500",
+  "bg-indigo-500",
+  "bg-purple-500",
+  "bg-pink-500",
+  "bg-rose-500",
+  "bg-orange-500",
+  "bg-teal-500",
+  "bg-cyan-500",
+  "bg-gray-500",
+]
+
+export function getPriorityInfo(priority: Priority, settings?: Settings) {
+  const defaultInfo = PRIORITY_INFO[priority]
+  if (settings?.customPriorityColors?.[priority]) {
+    return { ...defaultInfo, color: settings.customPriorityColors[priority] }
+  }
+  return defaultInfo
 }
 
 export const STATUS_INFO: Record<Status, { label: string; color: string; bgColor: string }> = {

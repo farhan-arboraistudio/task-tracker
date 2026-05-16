@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select"
 import { useTasks } from "@/lib/task-context"
 import type { Priority, Quadrant } from "@/lib/types"
-import { PRIORITY_INFO, QUADRANT_INFO } from "@/lib/types"
+import { PRIORITY_INFO, QUADRANT_INFO, getPriorityInfo } from "@/lib/types"
 
 interface ManualTaskFormProps {
   onCancel?: () => void
@@ -158,14 +158,17 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="bg-popover border-border shadow-md">
-            {Object.entries(PRIORITY_INFO).map(([value, info]) => (
-              <SelectItem key={value} value={value}>
-                <span className="flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full ${info.color}`} />
-                  {info.label}
-                </span>
-              </SelectItem>
-            ))}
+            {(Object.keys(PRIORITY_INFO) as Priority[]).map((value) => {
+              const info = getPriorityInfo(value, settings)
+              return (
+                <SelectItem key={value} value={value}>
+                  <span className="flex items-center gap-2">
+                    <span className={`w-2 h-2 rounded-full ${info.color}`} />
+                    {info.label}
+                  </span>
+                </SelectItem>
+              )
+            })}
           </SelectContent>
         </Select>
 

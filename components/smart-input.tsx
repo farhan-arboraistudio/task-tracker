@@ -5,7 +5,7 @@ import { Plus, Calendar, Flag, Hash, Sparkles, FormInput } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useTasks } from "@/lib/task-context"
 import { parseTaskInput, formatDueDate } from "@/lib/task-parser"
-import { PRIORITY_INFO } from "@/lib/types"
+import { PRIORITY_INFO, getPriorityInfo } from "@/lib/types"
 import { inferQuadrant } from "@/lib/quadrant-engine"
 import { ManualTaskForm } from "./manual-task-form"
 
@@ -174,17 +174,11 @@ export function SmartInput() {
                           {(parsedTask.isPriorityExplicit || settings.autoPriority) && (
                             <span
                             className={`flex items-center gap-1 text-xs px-2 py-1 bg-secondary/80 rounded ${
-                              parsedTask.priority === "urgent"
-                                ? "text-red-500"
-                                : parsedTask.priority === "high"
-                                ? "text-amber-500"
-                                : parsedTask.priority === "medium"
-                                ? "text-blue-500"
-                                : "text-gray-500"
+                              getPriorityInfo(parsedTask.priority, settings).color.replace('bg-', 'text-')
                             }`}
                           >
                             <Flag className="w-3 h-3" />
-                            {PRIORITY_INFO[parsedTask.priority].label}
+                            {getPriorityInfo(parsedTask.priority, settings).label}
                           </span>
                           )}
 

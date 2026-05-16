@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Settings, Bell, Calendar, Trash2, Download, Grid2x2, Eye, Clock, Flag, Zap } from "lucide-react"
 import { useTasks } from "@/lib/task-context"
 import type { Priority, ViewType } from "@/lib/types"
+import { PRIORITY_COLOR_OPTIONS, getPriorityInfo, PRIORITY_INFO } from "@/lib/types"
 import {
   Sheet,
   SheetContent,
@@ -124,6 +125,45 @@ export function SettingsPanel() {
                     }`} />
                   </button>
                 </div>
+              </div>
+            </section>
+
+            <div className="h-px bg-[rgba(120,112,100,0.15)]" />
+
+            {/* ---- Priority Colors ---- */}
+            <section className="space-y-3">
+              <h3 className="text-sm font-medium text-foreground flex items-center gap-2">
+                <Flag className="w-4 h-4 text-muted-foreground" />
+                Priority Colors
+              </h3>
+              <div className="space-y-4 pl-6">
+                {(Object.keys(PRIORITY_INFO) as Priority[]).map((priority) => {
+                  const info = getPriorityInfo(priority, settings)
+                  return (
+                    <div key={priority} className="flex flex-col gap-2">
+                      <label className="text-sm text-muted-foreground capitalize">{info.label}</label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {PRIORITY_COLOR_OPTIONS.map((color) => (
+                          <button
+                            key={color}
+                            onClick={() => {
+                              updateSettings({
+                                customPriorityColors: {
+                                  ...(settings.customPriorityColors || {}),
+                                  [priority]: color,
+                                },
+                              })
+                            }}
+                            className={`w-6 h-6 rounded-full transition-transform hover:scale-110 ${color} ${
+                              info.color === color ? "ring-2 ring-offset-2 ring-foreground" : "opacity-80"
+                            }`}
+                            aria-label={`Set ${info.label} priority to ${color}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </section>
 

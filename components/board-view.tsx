@@ -4,7 +4,7 @@ import { useMemo } from "react"
 import { motion } from "framer-motion"
 import { useTasks } from "@/lib/task-context"
 import type { Task, Status } from "@/lib/types"
-import { STATUS_INFO, PRIORITY_INFO } from "@/lib/types"
+import { STATUS_INFO, PRIORITY_INFO, getPriorityInfo } from "@/lib/types"
 import { formatDueDate } from "@/lib/task-parser"
 import { Clock, CheckCircle2 } from "lucide-react"
 
@@ -57,7 +57,7 @@ export function BoardView() {
                 </div>
               ) : (
                 columnTasks.map((task, index) => {
-                  const priorityInfo = PRIORITY_INFO[task.priority]
+                  const priorityInfo = getPriorityInfo(task.priority, settings)
                   const isOverdue =
                     task.dueDate &&
                     new Date(task.dueDate) < new Date() &&

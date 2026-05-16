@@ -6,7 +6,7 @@ import { useDroppable, useDraggable } from "@dnd-kit/core"
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { useTasks } from "@/lib/task-context"
 import type { Quadrant, Task, Priority } from "@/lib/types"
-import { QUADRANT_INFO, PRIORITY_INFO } from "@/lib/types"
+import { QUADRANT_INFO, PRIORITY_INFO, getPriorityInfo } from "@/lib/types"
 import { MatrixTaskCard } from "./matrix-task-card"
 import { Wand2, ChevronRight, ChevronLeft, Filter, Pencil } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -72,8 +72,8 @@ interface DraggableSidebarTaskProps {
 }
 
 function DraggableSidebarTask({ task }: DraggableSidebarTaskProps) {
-  const { moveToQuadrant } = useTasks()
-  const priorityInfo = PRIORITY_INFO[task.priority]
+  const { moveToQuadrant, settings } = useTasks()
+  const priorityInfo = getPriorityInfo(task.priority, settings)
   
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: task.id,

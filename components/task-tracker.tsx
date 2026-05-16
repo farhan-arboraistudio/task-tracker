@@ -48,7 +48,16 @@ const ALL_VIEW_MAP: Record<ViewType, { label: string; icon: React.ReactNode }> =
 }
 
 function TaskTrackerContent() {
-  const { tasks, settings, moveToQuadrant, trackViewUsage, isLoaded } = useTasks()
+  const {
+    tasks,
+    viewUsage,
+    trackViewUsage,
+    moveToQuadrant,
+    reorderTask,
+    autoSortTasks,
+    settings,
+    isLoaded,
+  } = useTasks()
   const [view, setView] = useState<ViewType>("list")
   const [lastNonMatrixView, setLastNonMatrixView] = useState<Exclude<ViewType, "matrix">>("list")
   const [showViewPicker, setShowViewPicker] = useState(false)
@@ -95,16 +104,20 @@ function TaskTrackerContent() {
       const { active, over } = event
       setActiveTask(null)
 
-      if (!over) return
+      if (!over || active.id === over.id) return
 
       const overId = over.id as string
       const quadrants: Quadrant[] = ["do-first", "schedule", "delegate", "eliminate"]
 
+      // If dropped directly onto a quadrant background
       if (quadrants.includes(overId as Quadrant)) {
         moveToQuadrant(active.id as string, overId as Quadrant)
+      } else {
+        // If dropped onto another task, reorder and sync quadrant
+        reorderTask(active.id as string, overId)
       }
     },
-    [moveToQuadrant]
+    [moveToQuadrant, reorderTask]
   )
 
   const isMatrix = view === "matrix"
@@ -168,12 +181,7 @@ function TaskTrackerContent() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -6, scale: 0.95 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute top-full left-0 mt-1.5 z-50 rounded-xl p-1.5 min-w-[160px]"
-                      style={{
-                        background: "#252320",
-                        border: "1px solid rgba(120, 112, 100, 0.2)",
-                        boxShadow: "0 12px 40px rgba(0,0,0,0.4)",
-                      }}
+                      className="absolute top-full left-0 mt-1.5 z-50 rounded-xl p-1.5 min-w-[160px] bg-popover border border-border shadow-md"
                     >
                       {VIEW_OPTIONS.map((option) => (
                         <button

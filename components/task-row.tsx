@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown, ChevronRight, Pencil, Bell, Repeat, GripVertical, Flag, Calendar as CalendarIcon, Trash2, ArrowRight } from "lucide-react"
 import { useTasks } from "@/lib/task-context"
 import type { Task, Status, Priority } from "@/lib/types"
-import { PRIORITY_INFO, STATUS_INFO, QUADRANT_INFO } from "@/lib/types"
+import { PRIORITY_INFO, STATUS_INFO, QUADRANT_INFO, getPriorityInfo } from "@/lib/types"
 import { formatDueDate } from "@/lib/task-parser"
 import { SubtaskList } from "./subtask-list"
 import { TaskActionsMenu } from "./task-actions-menu"
@@ -49,7 +49,7 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
   const totalSubtasks = task.subtasks.length
   const progress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0
 
-  const priorityInfo = PRIORITY_INFO[task.priority]
+  const priorityInfo = getPriorityInfo(task.priority, settings)
 
   const handleStatusChange = (status: Status) => {
     updateStatus(task.id, status)
@@ -278,19 +278,22 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
                   {/* Priority Quick Select */}
                   <div className="flex items-center gap-1">
                     <Flag className="w-3.5 h-3.5 text-muted-foreground" />
-                    {(Object.entries(PRIORITY_INFO) as [Priority, { label: string; color: string }][]).map(([value, info]) => (
-                      <button
-                        key={value}
-                        onClick={() => updateTask(task.id, { priority: value })}
-                        className={`px-2 py-0.5 text-xs rounded-md transition-all ${
-                          task.priority === value
-                            ? `${info.color} text-white font-medium`
-                            : "bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
-                        }`}
-                      >
-                        {info.label}
-                      </button>
-                    ))}
+                    {(Object.keys(PRIORITY_INFO) as Priority[]).map((value) => {
+                      const info = getPriorityInfo(value, settings)
+                      return (
+                        <button
+                          key={value}
+                          onClick={() => updateTask(task.id, { priority: value })}
+                          className={`px-2 py-0.5 text-xs rounded-md transition-all ${
+                            task.priority === value
+                              ? `${info.color} text-white font-medium`
+                              : "bg-secondary text-muted-foreground hover:bg-secondary/80 hover:text-foreground"
+                          }`}
+                        >
+                          {info.label}
+                        </button>
+                      )
+                    })}
                   </div>
 
                   <div className="w-px h-4 bg-[rgba(120,112,100,0.2)]" />
