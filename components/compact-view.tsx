@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react"
 import { motion } from "framer-motion"
 import { useTasks } from "@/lib/task-context"
-import { PRIORITY_INFO, STATUS_INFO, getPriorityInfo } from "@/lib/types"
+import { PRIORITY_INFO, STATUS_INFO, getPriorityInfo, getPriorityStyles } from "@/lib/types"
 import type { FilterState, Task } from "@/lib/types"
 import { formatDueDate } from "@/lib/task-parser"
 import { isToday, isThisWeek, isBefore, startOfDay } from "date-fns"
@@ -64,7 +64,8 @@ export function CompactView() {
               new Date(task.dueDate) < new Date() &&
               task.status !== "done"
             
-            const activeBorder = task.status !== "done" ? priorityInfo.color.replace("bg-", "border-") : "border-transparent"
+            const pStyles = getPriorityStyles(priorityInfo.color)
+            const activeBorder = task.status !== "done" ? pStyles.border : "border-transparent"
 
             return (
               <div

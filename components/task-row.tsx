@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown, ChevronRight, Pencil, Bell, Repeat, GripVertical, Flag, Calendar as CalendarIcon, Trash2, ArrowRight, Link2, Plus, X } from "lucide-react"
 import { useTasks } from "@/lib/task-context"
 import type { Task, Status, Priority } from "@/lib/types"
-import { PRIORITY_INFO, STATUS_INFO, QUADRANT_INFO, getPriorityInfo } from "@/lib/types"
+import { PRIORITY_INFO, STATUS_INFO, QUADRANT_INFO, getPriorityInfo, getPriorityStyles } from "@/lib/types"
 import { formatDueDate } from "@/lib/task-parser"
 import { SubtaskList } from "./subtask-list"
 import { TaskActionsMenu } from "./task-actions-menu"
@@ -58,8 +58,9 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
   const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && task.status !== "done"
 
   // Priority-based subtle border glow
-  const activeBorder = task.status !== "done" ? priorityInfo.color.replace("bg-", "border-") : "border-transparent"
-  const activeShadow = task.status !== "done" ? priorityInfo.color.replace("bg-", "shadow-") : ""
+  const pStyles = getPriorityStyles(priorityInfo.color)
+  const activeBorder = task.status !== "done" ? pStyles.border : "border-transparent"
+  const activeShadow = task.status !== "done" ? pStyles.shadow : ""
 
   return (
     <div

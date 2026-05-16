@@ -141,6 +141,24 @@ export function getPriorityInfo(priority: Priority, settings?: Settings) {
   return { ...defaultInfo, color, label }
 }
 
+export function getPriorityStyles(bgColor: string) {
+  const styles: Record<string, { border: string; shadow: string }> = {
+    "bg-red-500": { border: "border-red-500", shadow: "shadow-red-500" },
+    "bg-amber-500": { border: "border-amber-500", shadow: "shadow-amber-500" },
+    "bg-emerald-500": { border: "border-emerald-500", shadow: "shadow-emerald-500" },
+    "bg-blue-500": { border: "border-blue-500", shadow: "shadow-blue-500" },
+    "bg-indigo-500": { border: "border-indigo-500", shadow: "shadow-indigo-500" },
+    "bg-purple-500": { border: "border-purple-500", shadow: "shadow-purple-500" },
+    "bg-pink-500": { border: "border-pink-500", shadow: "shadow-pink-500" },
+    "bg-rose-500": { border: "border-rose-500", shadow: "shadow-rose-500" },
+    "bg-orange-500": { border: "border-orange-500", shadow: "shadow-orange-500" },
+    "bg-teal-500": { border: "border-teal-500", shadow: "shadow-teal-500" },
+    "bg-cyan-500": { border: "border-cyan-500", shadow: "shadow-cyan-500" },
+    "bg-gray-500": { border: "border-gray-500", shadow: "shadow-gray-500" },
+  }
+  return styles[bgColor] || { border: "border-transparent", shadow: "shadow-transparent" }
+}
+
 export function getQuadrantInfo(quadrant: Quadrant, settings?: Settings) {
   if (!quadrant) return null
   const baseInfo = QUADRANT_INFO[quadrant]
