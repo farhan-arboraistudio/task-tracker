@@ -6,7 +6,7 @@ import { useDroppable, useDraggable } from "@dnd-kit/core"
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { useTasks } from "@/lib/task-context"
 import type { Quadrant, Task, Priority } from "@/lib/types"
-import { QUADRANT_INFO, PRIORITY_INFO, getPriorityInfo } from "@/lib/types"
+import { QUADRANT_INFO, PRIORITY_INFO, getPriorityInfo, getQuadrantInfo } from "@/lib/types"
 import { MatrixTaskCard } from "./matrix-task-card"
 import { Wand2, ChevronRight, ChevronLeft, Filter, Pencil } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -27,7 +27,8 @@ interface QuadrantDropZoneProps {
 }
 
 function QuadrantDropZone({ quadrant, tasks }: QuadrantDropZoneProps) {
-  const info = QUADRANT_INFO[quadrant!]
+  const { settings } = useTasks()
+  const info = getQuadrantInfo(quadrant!, settings)!
   
   const { setNodeRef, isOver } = useDroppable({
     id: quadrant as string,
@@ -107,7 +108,7 @@ function DraggableSidebarTask({ task }: DraggableSidebarTaskProps) {
       <div className="flex gap-1 mt-2">
         {(Object.keys(QUADRANT_INFO) as Quadrant[]).map((q) => {
           if (!q) return null
-          const qInfo = QUADRANT_INFO[q]
+          const qInfo = getQuadrantInfo(q!, settings)!
           return (
             <button
               key={q}

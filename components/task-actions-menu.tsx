@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useTasks } from "@/lib/task-context"
 import type { Task, Quadrant } from "@/lib/types"
-import { QUADRANT_INFO } from "@/lib/types"
+import { getQuadrantInfo } from "@/lib/types"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -43,7 +43,7 @@ interface TaskActionsMenuProps {
 }
 
 export function TaskActionsMenu({ task, onEdit, onSetReminder, onOpenChange }: TaskActionsMenuProps) {
-  const { deleteTask, duplicateTask, carryForward, moveToQuadrant } = useTasks()
+  const { deleteTask, duplicateTask, carryForward, moveToQuadrant, settings } = useTasks()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const quadrants: Quadrant[] = ["do-first", "schedule", "delegate", "eliminate"]
@@ -86,7 +86,7 @@ export function TaskActionsMenu({ task, onEdit, onSetReminder, onOpenChange }: T
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent className="bg-popover border-border">
               {quadrants.filter(Boolean).map((q) => {
-                const info = QUADRANT_INFO[q!]
+                const info = getQuadrantInfo(q!, settings)!
                 return (
                   <DropdownMenuItem
                     key={q}

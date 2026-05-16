@@ -138,6 +138,28 @@ export function getPriorityInfo(priority: Priority, settings?: Settings) {
   return defaultInfo
 }
 
+export function getQuadrantInfo(quadrant: Quadrant, settings?: Settings) {
+  if (!quadrant) return null
+  const baseInfo = QUADRANT_INFO[quadrant]
+  
+  const quadrantToPriority: Record<NonNullable<Quadrant>, Priority> = {
+    "do-first": "urgent",
+    "schedule": "high",
+    "delegate": "medium",
+    "eliminate": "low",
+  }
+  
+  const mappedPriority = quadrantToPriority[quadrant]
+  const priorityColor = getPriorityInfo(mappedPriority, settings).color
+  
+  return {
+    ...baseInfo,
+    color: `${priorityColor}/10`,
+    borderColor: `${priorityColor.replace("bg-", "border-")}/20`,
+    textColor: priorityColor.replace("bg-", "text-").replace("-500", "-400"),
+  }
+}
+
 export const STATUS_INFO: Record<Status, { label: string; color: string; bgColor: string }> = {
   todo: { label: "To Do", color: "text-muted-foreground", bgColor: "bg-secondary" },
   "in-progress": { label: "In Progress", color: "text-blue-500", bgColor: "bg-blue-500/10" },
