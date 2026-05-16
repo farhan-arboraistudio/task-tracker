@@ -114,8 +114,8 @@ export const PRIORITY_INFO: Record<Priority, { label: string; color: string }> =
   low: { label: "Low", color: "bg-gray-500" },
 }
 
-export const STATUS_INFO: Record<Status, { label: string }> = {
-  todo: { label: "To Do" },
-  "in-progress": { label: "In Progress" },
-  done: { label: "Done" },
+export const STATUS_INFO: Record<Status, { label: string; color: string; bgColor: string }> = {
+  todo: { label: "To Do", color: "text-muted-foreground", bgColor: "bg-secondary" },
+  "in-progress": { label: "In Progress", color: "text-blue-500", bgColor: "bg-blue-500/10" },
+  done: { label: "Done", color: "text-green-500", bgColor: "bg-green-500/10" },
 }

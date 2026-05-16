@@ -136,9 +136,9 @@ export function TaskRow({ task, isDragging }: TaskRowProps) {
 
           {/* Task Title */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span
-                className={`text-sm truncate ${
+                className={`text-sm break-words ${
                   task.status === "done"
                     ? "text-muted-foreground line-through"
                     : "text-foreground"
@@ -200,10 +200,12 @@ export function TaskRow({ task, isDragging }: TaskRowProps) {
           <select
             value={task.status}
             onChange={(e) => handleStatusChange(e.target.value as Status)}
-            className="hidden sm:block text-xs bg-[rgba(45,43,40,0.5)] text-muted-foreground px-2 py-1 rounded appearance-none cursor-pointer hover:bg-[rgba(60,57,52,0.5)] transition-colors focus:outline-none"
+            className={`hidden sm:block text-xs font-medium px-2 py-1 rounded-md appearance-none cursor-pointer transition-colors focus:outline-none w-[90px] text-center ${
+              STATUS_INFO[task.status].bgColor
+            } ${STATUS_INFO[task.status].color} hover:opacity-80`}
           >
             {Object.entries(STATUS_INFO).map(([value, info]) => (
-              <option key={value} value={value}>
+              <option key={value} value={value} className="bg-popover text-foreground">
                 {info.label}
               </option>
             ))}
@@ -278,7 +280,7 @@ export function TaskRow({ task, isDragging }: TaskRowProps) {
                   <div className="w-px h-4 bg-[rgba(120,112,100,0.2)]" />
 
                   {/* Status Quick Select */}
-                  {(Object.entries(STATUS_INFO) as [Status, { label: string }][]).map(([value, info]) => (
+                  {(Object.entries(STATUS_INFO) as [Status, typeof STATUS_INFO[Status]][]).map(([value, info]) => (
                     <button
                       key={value}
                       onClick={() => updateStatus(task.id, value)}
