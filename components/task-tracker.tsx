@@ -34,10 +34,9 @@ import {
   Grid2x2,
 } from "lucide-react"
 
-const VIEW_OPTIONS: { value: Exclude<ViewType, "matrix">; label: string; icon: React.ReactNode }[] = [
+const VIEW_OPTIONS: { value: Exclude<ViewType, "matrix" | "calendar">; label: string; icon: React.ReactNode }[] = [
   { value: "list", label: "List", icon: <List className="w-4 h-4" /> },
   { value: "board", label: "Board", icon: <Columns3 className="w-4 h-4" /> },
-  { value: "calendar", label: "Calendar", icon: <CalendarIcon className="w-4 h-4" /> },
   { value: "compact", label: "Compact", icon: <AlignJustify className="w-4 h-4" /> },
 ]
 
@@ -62,7 +61,7 @@ function TaskTrackerContent() {
     isLoaded,
   } = useTasks()
   const [view, setView] = useState<ViewType>("list")
-  const [lastNonMatrixView, setLastNonMatrixView] = useState<Exclude<ViewType, "matrix">>("list")
+  const [lastNonMatrixView, setLastNonMatrixView] = useState<Exclude<ViewType, "matrix" | "calendar">>("list")
   const [showViewPicker, setShowViewPicker] = useState(false)
   const [activeTask, setActiveTask] = useState<Task | null>(null)
   const [initialized, setInitialized] = useState(false)
@@ -74,8 +73,8 @@ function TaskTrackerContent() {
   useEffect(() => {
     if (isLoaded && !initialized && settings.startupView) {
       setView(settings.startupView)
-      if (settings.startupView !== "matrix") {
-        setLastNonMatrixView(settings.startupView as Exclude<ViewType, "matrix">)
+      if (settings.startupView !== "matrix" && settings.startupView !== "calendar") {
+        setLastNonMatrixView(settings.startupView as Exclude<ViewType, "matrix" | "calendar">)
       }
       setInitialized(true)
     }
@@ -90,8 +89,8 @@ function TaskTrackerContent() {
   )
 
   const handleViewChange = useCallback((newView: ViewType) => {
-    if (newView !== "matrix") {
-      setLastNonMatrixView(newView as Exclude<ViewType, "matrix">)
+    if (newView !== "matrix" && newView !== "calendar") {
+      setLastNonMatrixView(newView as Exclude<ViewType, "matrix" | "calendar">)
     }
     setView(newView)
     trackViewUsage(newView)
@@ -248,6 +247,19 @@ function TaskTrackerContent() {
                   )}
                 </motion.span>
               </AnimatePresence>
+            </button>
+
+            {/* Calendar Toggle */}
+            <button
+              onClick={() => handleViewChange(view === "calendar" ? lastNonMatrixView : "calendar")}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+                view === "calendar"
+                  ? "glass shadow-[0_0_20px_rgba(210,205,195,0.05)] text-foreground"
+                  : "bg-[rgba(45,43,40,0.3)] text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <CalendarIcon className="w-4 h-4" />
+              Calendar
             </button>
           </div>
 

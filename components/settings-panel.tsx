@@ -46,7 +46,7 @@ export function SettingsPanel() {
       console.error("Google Login Failed")
       updateSettings({ googleCalendarConnected: false })
     },
-    scope: "https://www.googleapis.com/auth/calendar.events",
+    scope: "https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/tasks.readonly",
   })
 
   const handleClearAllTasks = () => {

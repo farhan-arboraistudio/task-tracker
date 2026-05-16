@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState, useCallback, type React
 import { addDays, addWeeks, addMonths } from "date-fns"
 import type { Task, Status, Priority, Quadrant, Subtask, Settings, ViewType } from "./types"
 import { inferQuadrant } from "./quadrant-engine"
-import { syncTaskToGoogleCalendar, deleteFromGoogleCalendar } from "./gcal-sync"
+import { syncTaskToGoogleCalendar, deleteFromGoogleCalendar, fetchGoogleTasks } from "./gcal-sync"
 
 interface TaskContextType {
   tasks: Task[]
@@ -26,6 +26,7 @@ interface TaskContextType {
   updateSettings: (updates: Partial<Settings>) => void
   trackViewUsage: (view: ViewType) => void
   getMostUsedView: () => ViewType
+  externalTasks: any[]
   isLoaded: boolean
 }
 
@@ -121,6 +122,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
   const [tasks, setTasks] = useState<Task[]>([])
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS)
   const [viewUsage, setViewUsage] = useState<Record<string, number>>({})
+  const [externalTasks, setExternalTasks] = useState<any[]>([])
   const [isLoaded, setIsLoaded] = useState(false)
 
   // Load from localStorage on mount
@@ -145,6 +147,20 @@ export function TaskProvider({ children }: { children: ReactNode }) {
       saveSettings(settings)
     }
   }, [settings, isLoaded])
+
+  // Fetch Google Tasks
+  useEffect(() => {
+    if (isLoaded && settings.googleCalendarConnected) {
+      const token = localStorage.getItem("gcal_access_token")
+      if (token) {
+        fetchGoogleTasks(token).then((tasks) => {
+          setExternalTasks(tasks)
+        }).catch((err) => {
+          console.error("Failed to fetch external tasks:", err)
+        })
+      }
+    }
+  }, [isLoaded, settings.googleCalendarConnected])
 
   const addTask = useCallback((task: Omit<Task, "id" | "createdAt" | "updatedAt">) => {
     const now = new Date()
@@ -551,6 +567,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         updateSettings,
         trackViewUsage,
         getMostUsedView,
+        externalTasks,
         isLoaded,
       }}
     >

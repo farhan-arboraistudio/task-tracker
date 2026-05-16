@@ -55,3 +55,24 @@ export async function deleteFromGoogleCalendar(eventId: string, accessToken: str
     console.error("Error deleting from Google Calendar:", e)
   }
 }
+
+export async function fetchGoogleTasks(accessToken: string) {
+  try {
+    const response = await fetch("https://tasks.googleapis.com/tasks/v1/lists/@default/tasks?showCompleted=false&showHidden=false", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    
+    if (!response.ok) {
+      console.error("Failed to fetch Google Tasks", await response.text())
+      return []
+    }
+
+    const data = await response.json()
+    return data.items || []
+  } catch (e) {
+    console.error("Error fetching Google Tasks:", e)
+    return []
+  }
+}

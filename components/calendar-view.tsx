@@ -73,11 +73,15 @@ function DayCell({ date, tasks, isCurrentMonth, isSelected, onSelect, settings }
                   ? "bg-muted text-muted-foreground line-through"
                   : isOverdue
                   ? "bg-red-500/20 text-red-400"
+                  : (task as any).isExternal 
+                  ? "bg-blue-500/20 text-blue-400"
                   : "bg-secondary/80 text-foreground"
               }`}
             >
               <span
-                className={`inline-block w-1.5 h-1.5 rounded-full mr-1 ${priorityInfo.color}`}
+                className={`inline-block w-1.5 h-1.5 rounded-full mr-1 ${
+                  (task as any).isExternal ? "bg-blue-500" : priorityInfo.color
+                }`}
               />
               {task.title}
             </div>
@@ -229,12 +233,14 @@ function DayDetailPanel({ date, tasks, onClose }: DayDetailPanelProps) {
                       </span>
                     </div>
                   </div>
-                  <button
-                    onClick={() => setEditingTask(task)}
-                    className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
-                  >
-                    <Plus className="w-4 h-4 rotate-45" />
-                  </button>
+                  {!(task as any).isExternal && (
+                    <button
+                      onClick={() => setEditingTask(task)}
+                      className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
+                    >
+                      <Plus className="w-4 h-4 rotate-45" />
+                    </button>
+                  )}
                 </div>
               </div>
             )
@@ -252,7 +258,7 @@ function DayDetailPanel({ date, tasks, onClose }: DayDetailPanelProps) {
 }
 
 export function CalendarView() {
-  const { tasks, settings } = useTasks()
+  const { tasks, externalTasks, settings } = useTasks()
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [showMonthPicker, setShowMonthPicker] = useState(false)
@@ -282,8 +288,36 @@ export function CalendarView() {
         map.set(dateKey, [...existing, task])
       }
     })
+
+    // Add external Google Tasks
+    if (externalTasks && Array.isArray(externalTasks)) {
+      externalTasks.forEach((et) => {
+        if (!settings.showCompletedTasks && et.status === "completed") return
+        if (et.due) {
+          const dateKey = format(new Date(et.due), "yyyy-MM-dd")
+          const existing = map.get(dateKey) || []
+          const externalTaskAsTask: Task = {
+            id: `gcal-${et.id}`,
+            title: et.title || "Untitled Task",
+            createdAt: new Date(et.updated),
+            updatedAt: new Date(et.updated),
+            dueDate: new Date(et.due),
+            status: et.status === "completed" ? "done" : "todo",
+            priority: "medium", // Default for external tasks
+            quadrant: null,
+            tags: ["Google Task"],
+            subtasks: [],
+            notes: et.notes || "",
+            isExternal: true,
+          } as Task & { isExternal?: boolean }
+          
+          map.set(dateKey, [...existing, externalTaskAsTask])
+        }
+      })
+    }
+
     return map
-  }, [tasks, settings.showCompletedTasks])
+  }, [tasks, externalTasks, settings.showCompletedTasks])
 
   const selectedDateTasks = useMemo(() => {
     if (!selectedDate) return []
