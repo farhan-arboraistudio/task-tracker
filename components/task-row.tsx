@@ -57,14 +57,9 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
 
   const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && task.status !== "done"
 
-  // Priority-based neon glow effect
-  const glowClasses: Record<string, string> = {
-    urgent: "bg-red-500 shadow-[0_0_20px_3px_rgba(239,68,68,0.4)]",
-    high: "bg-amber-500 shadow-[0_0_20px_3px_rgba(245,158,11,0.4)]",
-    medium: "bg-blue-500 shadow-[0_0_20px_3px_rgba(59,130,246,0.4)]",
-    low: "bg-gray-500/50 shadow-[0_0_15px_2px_rgba(156,163,175,0.2)]",
-  }
-  const neonGlow = task.status !== "done" ? glowClasses[task.priority] : ""
+  // Priority-based subtle border glow
+  const activeBorder = task.status !== "done" ? priorityInfo.color.replace("bg-", "border-") : "border-transparent"
+  const activeShadow = task.status !== "done" ? priorityInfo.color.replace("bg-", "shadow-") : ""
 
   return (
     <div
@@ -74,18 +69,14 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
     >
       <motion.div
         layout
-        className={`rounded-xl transition-all duration-300 relative overflow-hidden ${
+        className={`rounded-xl transition-all duration-300 relative overflow-hidden border ${activeBorder} bg-card/40 ${
           isHovering || isExpanded || isMenuOpen
-            ? "glass shadow-[0_0_24px_rgba(210,205,195,0.06)] ring-1 ring-[rgba(120,112,100,0.25)]"
-            : ""
+            ? `glass shadow-lg ${activeShadow}/20 ring-1 ring-[rgba(120,112,100,0.1)]`
+            : "shadow-sm"
         }`}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
-        {/* Neon Edge Glow */}
-        {neonGlow && (
-          <div className={`absolute left-0 top-0 bottom-0 w-[2px] ${neonGlow}`} />
-        )}
         
         <div className="flex items-center gap-3 px-3 py-3 relative z-10">
           {/* Drag Handle */}
@@ -127,10 +118,6 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
             onClick={() => setIsExpanded(!isExpanded)}
           >
             <div className="flex items-center gap-2 flex-wrap">
-              <div
-                className={`w-2 h-2 rounded-full flex-shrink-0 ${priorityInfo.color}`}
-                title={priorityInfo.label}
-              />
               <span
                 className={`text-sm break-words ${
                   task.status === "done"

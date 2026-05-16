@@ -63,19 +63,16 @@ export function CompactView() {
               task.dueDate &&
               new Date(task.dueDate) < new Date() &&
               task.status !== "done"
+            
+            const activeBorder = task.status !== "done" ? priorityInfo.color.replace("bg-", "border-") : "border-transparent"
+
             return (
               <div
                 key={task.id}
-                className={`flex items-center gap-3 px-3 py-2 hover:bg-secondary/60 transition-colors ${
+                className={`flex items-center gap-3 px-3 py-2 border-l-2 ${activeBorder} hover:bg-secondary/60 transition-colors ${
                   task.status === "done" ? "opacity-50" : ""
                 }`}
               >
-
-
-                {/* Priority dot */}
-                <div
-                  className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${priorityInfo.color}`}
-                />
 
                 {/* Title */}
                 <span
