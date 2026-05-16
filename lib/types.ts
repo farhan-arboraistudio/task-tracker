@@ -143,18 +143,18 @@ export function getPriorityInfo(priority: Priority, settings?: Settings) {
 
 export function getPriorityStyles(bgColor: string) {
   const styles: Record<string, { border: string; shadow: string }> = {
-    "bg-red-500": { border: "border-red-500/30", shadow: "shadow-[0_0_15px_rgba(239,68,68,0.15)]" },
-    "bg-amber-500": { border: "border-amber-500/30", shadow: "shadow-[0_0_15px_rgba(245,158,11,0.15)]" },
-    "bg-emerald-500": { border: "border-emerald-500/30", shadow: "shadow-[0_0_15px_rgba(16,185,129,0.15)]" },
-    "bg-blue-500": { border: "border-blue-500/30", shadow: "shadow-[0_0_15px_rgba(59,130,246,0.15)]" },
-    "bg-indigo-500": { border: "border-indigo-500/30", shadow: "shadow-[0_0_15px_rgba(99,102,241,0.15)]" },
-    "bg-purple-500": { border: "border-purple-500/30", shadow: "shadow-[0_0_15px_rgba(168,85,247,0.15)]" },
-    "bg-pink-500": { border: "border-pink-500/30", shadow: "shadow-[0_0_15px_rgba(236,72,153,0.15)]" },
-    "bg-rose-500": { border: "border-rose-500/30", shadow: "shadow-[0_0_15px_rgba(244,63,94,0.15)]" },
-    "bg-orange-500": { border: "border-orange-500/30", shadow: "shadow-[0_0_15px_rgba(249,115,22,0.15)]" },
-    "bg-teal-500": { border: "border-teal-500/30", shadow: "shadow-[0_0_15px_rgba(20,184,166,0.15)]" },
-    "bg-cyan-500": { border: "border-cyan-500/30", shadow: "shadow-[0_0_15px_rgba(6,182,212,0.15)]" },
-    "bg-gray-500": { border: "border-gray-500/30", shadow: "shadow-[0_0_15px_rgba(107,114,128,0.15)]" },
+    "bg-red-500": { border: "border-red-500/30", shadow: "shadow-[0_0_20px_2px_rgba(239,68,68,0.35)]" },
+    "bg-amber-500": { border: "border-amber-500/30", shadow: "shadow-[0_0_20px_2px_rgba(245,158,11,0.35)]" },
+    "bg-emerald-500": { border: "border-emerald-500/30", shadow: "shadow-[0_0_20px_2px_rgba(16,185,129,0.35)]" },
+    "bg-blue-500": { border: "border-blue-500/30", shadow: "shadow-[0_0_20px_2px_rgba(59,130,246,0.35)]" },
+    "bg-indigo-500": { border: "border-indigo-500/30", shadow: "shadow-[0_0_20px_2px_rgba(99,102,241,0.35)]" },
+    "bg-purple-500": { border: "border-purple-500/30", shadow: "shadow-[0_0_20px_2px_rgba(168,85,247,0.35)]" },
+    "bg-pink-500": { border: "border-pink-500/30", shadow: "shadow-[0_0_20px_2px_rgba(236,72,153,0.35)]" },
+    "bg-rose-500": { border: "border-rose-500/30", shadow: "shadow-[0_0_20px_2px_rgba(244,63,94,0.35)]" },
+    "bg-orange-500": { border: "border-orange-500/30", shadow: "shadow-[0_0_20px_2px_rgba(249,115,22,0.35)]" },
+    "bg-teal-500": { border: "border-teal-500/30", shadow: "shadow-[0_0_20px_2px_rgba(20,184,166,0.35)]" },
+    "bg-cyan-500": { border: "border-cyan-500/30", shadow: "shadow-[0_0_20px_2px_rgba(6,182,212,0.35)]" },
+    "bg-gray-500": { border: "border-gray-500/30", shadow: "shadow-[0_0_20px_2px_rgba(107,114,128,0.35)]" },
   }
   return styles[bgColor] || { border: "border-transparent", shadow: "shadow-transparent" }
 }
