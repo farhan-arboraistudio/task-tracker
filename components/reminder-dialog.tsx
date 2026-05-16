@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { format, addMinutes, addHours, addDays } from "date-fns"
 import { Bell, Calendar as CalendarIcon, Clock } from "lucide-react"
+import { TimePicker } from "./ui/time-picker"
 import {
   Dialog,
   DialogContent,
@@ -135,13 +136,10 @@ export function ReminderDialog({ task, open, onOpenChange }: ReminderDialogProps
                 </PopoverContent>
               </Popover>
 
-              <div className="flex items-center gap-1">
-                <Clock className="w-4 h-4 text-muted-foreground" />
-                <Input
-                  type="time"
+              <div className="flex-1 min-w-[120px]">
+                <TimePicker
                   value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                  className="bg-secondary border-border focus:border-foreground/40"
+                  onChange={setTime}
                 />
               </div>
             </div>

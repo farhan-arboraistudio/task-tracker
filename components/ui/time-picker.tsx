@@ -94,7 +94,7 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
           {/* Grid View */}
           {mode === "hour" ? (
              <div className="grid grid-cols-4 gap-2">
-                {[12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((h) => {
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((h) => {
                    const str = h.toString().padStart(2, "0")
                    const isSelected = hour === str
                    return (
