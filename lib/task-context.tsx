@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react"
 import type { Task, Status, Priority, Quadrant, Subtask, Settings, ViewType } from "./types"
 import { inferQuadrant } from "./quadrant-engine"
+import { syncTaskToGoogleCalendar, deleteFromGoogleCalendar } from "./gcal-sync"
 
 interface TaskContextType {
   tasks: Task[]
@@ -194,9 +195,22 @@ export function TaskProvider({ children }: { children: ReactNode }) {
     }
 
     setTasks((prev) => [newTask, ...prev])
-  }, [settings.autoAssignQuadrant, settings.autoPriority])
+
+    // Google Calendar Sync
+    if (settings.googleCalendarConnected && newTask.dueDate) {
+      const token = localStorage.getItem("gcal_access_token")
+      if (token) {
+        syncTaskToGoogleCalendar(newTask, token).then((eventId) => {
+          if (eventId) {
+            setTasks((prev) => prev.map((t) => t.id === newTask.id ? { ...t, gcalEventId: eventId } : t))
+          }
+        })
+      }
+    }
+  }, [settings])
 
   const updateTask = useCallback((id: string, updates: Partial<Task>) => {
+    let updatedTask: Task | null = null
     setTasks((prev) =>
       prev.map((task) => {
         if (task.id !== id) return task
@@ -240,14 +254,46 @@ export function TaskProvider({ children }: { children: ReactNode }) {
            updated.priority = syncPriorityWithQuadrant(updated.quadrant, updated.priority)
         }
         
+        updatedTask = updated
         return updated
       })
     )
-  }, [settings.autoAssignQuadrant, settings.autoPriority])
+
+    // Google Calendar Sync
+    if (updatedTask && settings.googleCalendarConnected) {
+      const token = localStorage.getItem("gcal_access_token")
+      const u = updatedTask as Task
+      if (token && (updates.title || updates.dueDate !== undefined || updates.priority || updates.status || updates.notes)) {
+        if (!u.dueDate && u.gcalEventId) {
+          // If due date was removed, delete from gcal
+          deleteFromGoogleCalendar(u.gcalEventId, token)
+          setTasks((prev) => prev.map((t) => t.id === id ? { ...t, gcalEventId: undefined } : t))
+        } else if (u.dueDate) {
+          syncTaskToGoogleCalendar(u, token).then((eventId) => {
+            if (eventId && !u.gcalEventId) {
+              setTasks((prev) => prev.map((t) => t.id === id ? { ...t, gcalEventId: eventId } : t))
+            }
+          })
+        }
+      }
+    }
+  }, [settings])
 
   const deleteTask = useCallback((id: string) => {
-    setTasks((prev) => prev.filter((task) => task.id !== id))
-  }, [])
+    let deletedTask: Task | null = null
+    setTasks((prev) => {
+      const task = prev.find(t => t.id === id)
+      if (task) deletedTask = task
+      return prev.filter((t) => t.id !== id)
+    })
+
+    if (deletedTask && settings.googleCalendarConnected) {
+      const token = localStorage.getItem("gcal_access_token")
+      if (token && (deletedTask as Task).gcalEventId) {
+        deleteFromGoogleCalendar((deletedTask as Task).gcalEventId!, token)
+      }
+    }
+  }, [settings.googleCalendarConnected])
 
   const addSubtask = useCallback((taskId: string, title: string) => {
     setTasks((prev) =>

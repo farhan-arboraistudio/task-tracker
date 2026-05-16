@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { Settings, Bell, Calendar, Trash2, Download, Grid2x2, Eye, Clock, Flag, Zap } from "lucide-react"
+import { Settings, Bell, Calendar, Trash2, Download, Grid2x2, Eye, Clock, Flag, Zap, Volume2 } from "lucide-react"
 import { useTasks } from "@/lib/task-context"
+import { useGoogleLogin } from "@react-oauth/google"
 import type { Priority, ViewType } from "@/lib/types"
 import { PRIORITY_COLOR_OPTIONS, getPriorityInfo, PRIORITY_INFO } from "@/lib/types"
 import {
@@ -35,6 +36,18 @@ import { Button } from "@/components/ui/button"
 export function SettingsPanel() {
   const { tasks, settings, updateSettings, autoSortTasks } = useTasks()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      localStorage.setItem("gcal_access_token", tokenResponse.access_token)
+      updateSettings({ googleCalendarConnected: true })
+    },
+    onError: () => {
+      console.error("Google Login Failed")
+      updateSettings({ googleCalendarConnected: false })
+    },
+    scope: "https://www.googleapis.com/auth/calendar.events",
+  })
 
   const handleClearAllTasks = () => {
     // Clear from localStorage
@@ -277,6 +290,22 @@ export function SettingsPanel() {
                     }`} />
                   </button>
                 </div>
+                <div className="flex items-center justify-between">
+                  <label className="text-sm text-muted-foreground flex items-center gap-2">
+                    <Volume2 className="w-3.5 h-3.5" />
+                    Play notification sound
+                  </label>
+                  <button
+                    onClick={() => updateSettings({ notificationSoundEnabled: !settings.notificationSoundEnabled })}
+                    className={`w-10 h-5 rounded-full transition-colors relative ${
+                      settings.notificationSoundEnabled ? "bg-foreground" : "bg-muted"
+                    }`}
+                  >
+                    <div className={`w-4 h-4 rounded-full bg-background absolute top-0.5 transition-all ${
+                      settings.notificationSoundEnabled ? "left-5.5" : "left-0.5"
+                    }`} />
+                  </button>
+                </div>
               </div>
             </section>
 
@@ -299,7 +328,14 @@ export function SettingsPanel() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => updateSettings({ googleCalendarConnected: !settings.googleCalendarConnected })}
+                    onClick={() => {
+                      if (settings.googleCalendarConnected) {
+                        localStorage.removeItem("gcal_access_token")
+                        updateSettings({ googleCalendarConnected: false })
+                      } else {
+                        googleLogin()
+                      }
+                    }}
                     className={`text-xs ${
                       settings.googleCalendarConnected
                         ? "bg-foreground text-background hover:bg-foreground/90 border-transparent"

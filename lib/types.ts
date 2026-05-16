@@ -23,6 +23,7 @@ export interface Task {
   timeEstimate?: string
   reminder: Date | null
   recurringPattern: "daily" | "weekly" | "monthly" | null
+  gcalEventId?: string
   createdAt: Date
   updatedAt: Date
 }
@@ -46,6 +47,7 @@ export interface Settings {
   defaultView: ViewType
   notificationsEnabled: boolean
   defaultReminderMinutes: number
+  notificationSoundEnabled?: boolean
   googleCalendarConnected?: boolean
   autoAssignQuadrant: boolean
   startupView: ViewType

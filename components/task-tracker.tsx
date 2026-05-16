@@ -12,6 +12,8 @@ import {
   type DragStartEvent,
 } from "@dnd-kit/core"
 import { TaskProvider, useTasks } from "@/lib/task-context"
+import { GoogleOAuthProvider } from "@react-oauth/google"
+import { useNotifications } from "@/hooks/use-notifications"
 import { SmartInput } from "./smart-input"
 import { TaskList } from "./task-list"
 import { BoardView } from "./board-view"
@@ -63,6 +65,9 @@ function TaskTrackerContent() {
   const [showViewPicker, setShowViewPicker] = useState(false)
   const [activeTask, setActiveTask] = useState<Task | null>(null)
   const [initialized, setInitialized] = useState(false)
+
+  // Mount notification system
+  useNotifications()
 
   // Set startup view from settings on first load
   useEffect(() => {
@@ -271,8 +276,10 @@ function TaskTrackerContent() {
 
 export function TaskTracker() {
   return (
-    <TaskProvider>
-      <TaskTrackerContent />
-    </TaskProvider>
+    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "no-client-id"}>
+      <TaskProvider>
+        <TaskTrackerContent />
+      </TaskProvider>
+    </GoogleOAuthProvider>
   )
 }
