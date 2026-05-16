@@ -53,6 +53,7 @@ export function parseTaskInput(input: string): ParsedTask {
 
   // Pre-process common shorthands and invalid times before chrono
   let preProcessedText = textWithoutPriority
+    .replace(/\bday after tomorrow\b/gi, "the day after tomorrow")
     .replace(/\btom\b/gi, "tomorrow")
     .replace(/\btod\b/gi, "today")
     // Replace something like "13pm" or "14pm" with "13:00" or "14:00"
@@ -83,6 +84,7 @@ export function parseTaskInput(input: string): ParsedTask {
     // To be safe and simple, we'll strip known shorthands too if the parsed text is exactly that.
     title = title
       .replace(firstResult.text, "")
+      .replace(/\bday after tomorrow\b/gi, "")
       .replace(/\btom\b/gi, "")
       .replace(/\btod\b/gi, "")
       // also replace the matched time if it was 13pm etc.
