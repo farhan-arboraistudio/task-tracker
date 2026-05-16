@@ -119,14 +119,7 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
             )}
           </button>
 
-          {/* Due Date */}
-          <span
-            className={`text-xs min-w-[80px] ${
-              isOverdue ? "text-red-400" : "text-muted-foreground"
-            }`}
-          >
-            {formatDueDate(task.dueDate)}
-          </span>
+
 
           {/* Task Title (Clickable area) */}
           <div 
@@ -207,6 +200,15 @@ export function TaskRow({ task, isDragging, isSelectionMode, isSelected, onToggl
               </option>
             ))}
           </select>
+
+          {/* Due Date */}
+          <span
+            className={`hidden sm:block text-xs min-w-[80px] text-right ${
+              isOverdue ? "text-red-400" : "text-muted-foreground"
+            }`}
+          >
+            {formatDueDate(task.dueDate)}
+          </span>
 
           {/* Status Checkbox (To Do Toggle) */}
           <button

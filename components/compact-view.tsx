@@ -70,16 +70,7 @@ export function CompactView() {
                   task.status === "done" ? "opacity-50" : ""
                 }`}
               >
-                {/* Due Date (Compact) */}
-                {task.dueDate && (
-                  <span
-                    className={`text-[10px] min-w-[50px] ${
-                      isOverdue ? "text-red-400" : "text-muted-foreground"
-                    }`}
-                  >
-                    {format(new Date(task.dueDate), "MMM d")}
-                  </span>
-                )}
+
 
                 {/* Priority dot */}
                 <div
@@ -96,6 +87,17 @@ export function CompactView() {
                 >
                   {task.title}
                 </span>
+
+                {/* Due Date (Compact) */}
+                {task.dueDate && (
+                  <span
+                    className={`text-[10px] min-w-[50px] text-right mr-2 ${
+                      isOverdue ? "text-red-400" : "text-muted-foreground"
+                    }`}
+                  >
+                    {format(new Date(task.dueDate), "MMM d")}
+                  </span>
+                )}
 
                 {/* Checkbox (Toggle) */}
                 <button
