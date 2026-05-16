@@ -66,7 +66,7 @@ export function SmartInput() {
   }
 
   return (
-    <div className="sticky top-0 z-10 pb-4">
+    <div className="sticky top-0 z-20 pb-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 pt-4 -mt-4">
       {/* Mode Toggle */}
       <div className="flex items-center gap-2 mb-3">
         <div className="flex items-center gap-1 p-1 bg-secondary rounded-lg">

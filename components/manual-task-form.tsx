@@ -157,7 +157,7 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
             <Flag className="w-4 h-4 mr-1" />
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="bg-secondary border-border">
+          <SelectContent className="bg-popover border-border shadow-md">
             {Object.entries(PRIORITY_INFO).map(([value, info]) => (
               <SelectItem key={value} value={value}>
                 <span className="flex items-center gap-2">
@@ -177,7 +177,7 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
           <SelectTrigger className="w-auto bg-secondary border-border h-8">
             <SelectValue placeholder="Quadrant" />
           </SelectTrigger>
-          <SelectContent className="bg-secondary border-border">
+          <SelectContent className="bg-popover border-border shadow-md">
             <SelectItem value="none">No quadrant</SelectItem>
             {Object.entries(QUADRANT_INFO).map(([value, info]) => (
               <SelectItem key={value} value={value}>
