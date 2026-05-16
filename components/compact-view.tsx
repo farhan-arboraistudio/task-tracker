@@ -10,12 +10,11 @@ import { isToday, isThisWeek, isBefore, startOfDay } from "date-fns"
 import { CheckCircle2 } from "lucide-react"
 
 export function CompactView() {
-  const { tasks, updateStatus } = useTasks()
-  const [hideCompleted, setHideCompleted] = useState(false)
+  const { tasks, updateStatus, settings, updateSettings } = useTasks()
 
   const sortedTasks = useMemo(() => {
     let result = [...tasks]
-    if (hideCompleted) {
+    if (!settings.showCompletedTasks) {
       result = result.filter((t) => t.status !== "done")
     }
     // Sort: overdue first, then by due date, then by priority
@@ -32,7 +31,7 @@ export function CompactView() {
       return priorityOrder[a.priority] - priorityOrder[b.priority]
     })
     return result
-  }, [tasks, hideCompleted])
+  }, [tasks, settings.showCompletedTasks])
 
   const doneCount = tasks.filter((t) => t.status === "done").length
 
@@ -44,10 +43,10 @@ export function CompactView() {
           {doneCount}/{tasks.length} done
         </p>
         <button
-          onClick={() => setHideCompleted(!hideCompleted)}
+          onClick={() => updateSettings({ showCompletedTasks: !settings.showCompletedTasks })}
           className="text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
-          {hideCompleted ? "Show completed" : "Hide completed"}
+          {!settings.showCompletedTasks ? "Show completed" : "Hide completed"}
         </button>
       </div>
 

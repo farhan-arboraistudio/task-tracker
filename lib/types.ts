@@ -38,7 +38,6 @@ export interface FilterState {
   status: Status | "all"
   dateRange: "all" | "today" | "week" | "overdue" | "noDate"
   tags: string[]
-  hideCompleted: boolean
 }
 
 export interface Settings {

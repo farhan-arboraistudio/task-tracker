@@ -183,6 +183,15 @@ export function TaskProvider({ children }: { children: ReactNode }) {
       createdAt: now,
       updatedAt: now,
     }
+
+    // Auto-set reminder based on defaultReminderMinutes if task has a due date
+    if (newTask.dueDate && !newTask.reminder) {
+      const reminderTime = new Date(newTask.dueDate.getTime() - settings.defaultReminderMinutes * 60000)
+      if (reminderTime > now) {
+        newTask.reminder = reminderTime
+      }
+    }
+
     setTasks((prev) => [newTask, ...prev])
   }, [settings.autoAssignQuadrant, settings.autoPriority])
 

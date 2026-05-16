@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/popover"
 import type { Priority, Status, SortField, SortDirection, FilterState } from "@/lib/types"
 import { PRIORITY_INFO, STATUS_INFO } from "@/lib/types"
+import { useTasks } from "@/lib/task-context"
 
 interface FilterBarProps {
   filters: FilterState
@@ -52,6 +53,7 @@ export function FilterBar({
   onSortChange,
   availableTags,
 }: FilterBarProps) {
+  const { settings, updateSettings } = useTasks()
   const [showAdvanced, setShowAdvanced] = useState(false)
 
   const activeFilterCount = useMemo(() => {
@@ -60,9 +62,9 @@ export function FilterBar({
     if (filters.status !== "all") count++
     if (filters.dateRange !== "all") count++
     if (filters.tags.length > 0) count++
-    if (filters.hideCompleted) count++
+    if (!settings.showCompletedTasks) count++
     return count
-  }, [filters])
+  }, [filters, settings.showCompletedTasks])
 
   const updateFilter = <K extends keyof FilterState>(key: K, value: FilterState[K]) => {
     onFiltersChange({ ...filters, [key]: value })
@@ -75,8 +77,8 @@ export function FilterBar({
       status: "all",
       dateRange: "all",
       tags: [],
-      hideCompleted: false,
     })
+    updateSettings({ showCompletedTasks: true })
   }
 
   const toggleTag = (tag: string) => {
@@ -154,9 +156,9 @@ export function FilterBar({
         ))}
 
         <button
-          onClick={() => updateFilter("hideCompleted", !filters.hideCompleted)}
+          onClick={() => updateSettings({ showCompletedTasks: !settings.showCompletedTasks })}
           className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
-            filters.hideCompleted
+            !settings.showCompletedTasks
               ? "bg-foreground text-background"
               : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80"
           }`}

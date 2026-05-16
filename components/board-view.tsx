@@ -15,7 +15,7 @@ const COLUMNS: { status: Status; label: string }[] = [
 ]
 
 export function BoardView() {
-  const { tasks, updateStatus } = useTasks()
+  const { tasks, updateStatus, settings } = useTasks()
 
   const tasksByStatus = useMemo(() => {
     const map: Record<Status, Task[]> = {
@@ -24,6 +24,7 @@ export function BoardView() {
       "done": [],
     }
     tasks.forEach((task) => {
+      if (!settings.showCompletedTasks && task.status === "done") return
       if (map[task.status]) {
         map[task.status].push(task)
       }

@@ -85,12 +85,12 @@ export function TaskActionsMenu({ task, onEdit, onSetReminder, onOpenChange }: T
               Move to Quadrant
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent className="bg-popover border-border">
-              {quadrants.map((q) => {
-                const info = QUADRANT_INFO[q]
+              {quadrants.filter(Boolean).map((q) => {
+                const info = QUADRANT_INFO[q!]
                 return (
                   <DropdownMenuItem
                     key={q}
-                    onClick={() => moveToQuadrant(task.id, q)}
+                    onClick={() => moveToQuadrant(task.id, q!)}
                     className="gap-2 cursor-pointer"
                   >
                     <div className={`w-2 h-2 rounded-full ${info.color.replace("/10", "")}`} />

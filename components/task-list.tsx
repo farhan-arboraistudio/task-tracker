@@ -15,14 +15,13 @@ import {
 } from "date-fns"
 
 export function TaskList() {
-  const { tasks } = useTasks()
+  const { tasks, settings } = useTasks()
   const [filters, setFilters] = useState<FilterState>({
     search: "",
     priority: "all",
     status: "all",
     dateRange: "all",
     tags: [],
-    hideCompleted: false,
   })
   const [sortField, setSortField] = useState<SortField>("dueDate")
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc")
@@ -37,7 +36,7 @@ export function TaskList() {
     let result = [...tasks]
 
     // Apply filters
-    if (filters.hideCompleted) {
+    if (!settings.showCompletedTasks) {
       result = result.filter((task) => task.status !== "done")
     }
 
@@ -100,9 +99,11 @@ export function TaskList() {
           else if (!b.dueDate) comparison = -1
           else comparison = new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
           break
-        case "priority":
+        case "priority": {
+          const PRIORITY_ORDER: Record<string, number> = { urgent: 0, high: 1, medium: 2, low: 3 }
           comparison = PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]
           break
+        }
         case "createdAt":
           comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
           break
@@ -160,7 +161,7 @@ export function TaskList() {
 
       {/* Results summary */}
       {(filters.search || filters.priority !== "all" || filters.status !== "all" || 
-        filters.dateRange !== "all" || filters.tags.length > 0 || filters.hideCompleted) && (
+        filters.dateRange !== "all" || filters.tags.length > 0 || !settings.showCompletedTasks) && (
         <p className="text-xs text-muted-foreground">
           Showing {filteredAndSortedTasks.length} of {tasks.length} tasks
         </p>
@@ -186,14 +187,13 @@ export function TaskList() {
                       status: "all",
                       dateRange: "all",
                       tags: [],
-                      hideCompleted: false,
                     })}
                     className="text-foreground underline mt-2"
                   >
                     Clear filters
                   </button>
                 </div>
-              ) : filters.hideCompleted && stats.done > 0 ? (
+              ) : !settings.showCompletedTasks && stats.done > 0 ? (
                 <p>{stats.done} completed tasks hidden</p>
               ) : (
                 <p>No tasks yet. Add one above!</p>

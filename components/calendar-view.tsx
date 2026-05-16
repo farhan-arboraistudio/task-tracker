@@ -251,7 +251,7 @@ function DayDetailPanel({ date, tasks, onClose }: DayDetailPanelProps) {
 }
 
 export function CalendarView() {
-  const { tasks } = useTasks()
+  const { tasks, settings } = useTasks()
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [showMonthPicker, setShowMonthPicker] = useState(false)
@@ -274,6 +274,7 @@ export function CalendarView() {
   const tasksByDate = useMemo(() => {
     const map = new Map<string, Task[]>()
     tasks.forEach((task) => {
+      if (!settings.showCompletedTasks && task.status === "done") return
       if (task.dueDate) {
         const dateKey = format(new Date(task.dueDate), "yyyy-MM-dd")
         const existing = map.get(dateKey) || []
@@ -281,7 +282,7 @@ export function CalendarView() {
       }
     })
     return map
-  }, [tasks])
+  }, [tasks, settings.showCompletedTasks])
 
   const selectedDateTasks = useMemo(() => {
     if (!selectedDate) return []

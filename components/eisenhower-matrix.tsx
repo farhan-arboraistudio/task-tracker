@@ -128,7 +128,7 @@ function DraggableSidebarTask({ task }: DraggableSidebarTaskProps) {
 }
 
 export function EisenhowerMatrix() {
-  const { tasks, autoSortTasks } = useTasks()
+  const { tasks, autoSortTasks, settings } = useTasks()
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [sidebarFilter, setSidebarFilter] = useState<"all" | "unassigned" | Priority>("unassigned")
 
@@ -141,7 +141,7 @@ export function EisenhowerMatrix() {
     }
 
     tasks
-      .filter((t) => t.status !== "done" && t.quadrant)
+      .filter((t) => (!settings.showCompletedTasks ? t.status !== "done" : true) && t.quadrant)
       .forEach((task) => {
         if (task.quadrant && grouped[task.quadrant]) {
           grouped[task.quadrant].push(task)
@@ -152,7 +152,7 @@ export function EisenhowerMatrix() {
   }, [tasks])
 
   const sidebarTasks = useMemo(() => {
-    let filtered = tasks.filter((t) => t.status !== "done")
+    let filtered = tasks.filter((t) => !settings.showCompletedTasks ? t.status !== "done" : true)
     
     if (sidebarFilter === "unassigned") {
       filtered = filtered.filter((t) => !t.quadrant)
@@ -164,7 +164,7 @@ export function EisenhowerMatrix() {
   }, [tasks, sidebarFilter])
 
   const unassignedCount = useMemo(
-    () => tasks.filter((t) => !t.quadrant && t.status !== "done").length,
+    () => tasks.filter((t) => !t.quadrant && (!settings.showCompletedTasks ? t.status !== "done" : true)).length,
     [tasks]
   )
 
