@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon, Flag, Tag, Plus, X, Clock, AlignLeft, Link2, Timer } from "lucide-react"
+import { TimePicker } from "./ui/time-picker"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -142,13 +143,10 @@ export function ManualTaskForm({ onCancel }: ManualTaskFormProps) {
 
         {/* Time */}
         {dueDate && (
-          <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-secondary border border-border">
-            <Clock className="w-4 h-4 text-muted-foreground" />
-            <Input
-              type="time"
+          <div className="w-28">
+            <TimePicker
               value={dueTime}
-              onChange={(e) => setDueTime(e.target.value)}
-              className="bg-transparent border-0 h-auto p-0 w-20 text-sm focus-visible:ring-0"
+              onChange={(val) => setDueTime(val)}
             />
           </div>
         )}

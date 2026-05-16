@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon, Flag, Tag, Plus, X, FileText, Clock, AlignLeft, Link2, Timer } from "lucide-react"
+import { TimePicker } from "./ui/time-picker"
 import {
   Dialog,
   DialogContent,
@@ -170,11 +171,9 @@ export function TaskEditDialog({ task, open, onOpenChange }: TaskEditDialogProps
                 <Clock className="w-4 h-4" />
                 Time
               </label>
-              <Input
-                type="time"
+              <TimePicker
                 value={dueTime}
-                onChange={(e) => setDueTime(e.target.value)}
-                className="bg-secondary border-border focus:border-foreground/40"
+                onChange={setDueTime}
               />
             </div>
           </div>
