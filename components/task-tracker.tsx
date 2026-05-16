@@ -56,6 +56,7 @@ function TaskTrackerContent() {
     trackViewUsage,
     moveToQuadrant,
     reorderTask,
+    updateStatus,
     autoSortTasks,
     settings,
     isLoaded,
@@ -113,16 +114,21 @@ function TaskTrackerContent() {
 
       const overId = over.id as string
       const quadrants: Quadrant[] = ["do-first", "schedule", "delegate", "eliminate"]
+      const statuses: string[] = ["todo", "in-progress", "done"]
 
       // If dropped directly onto a quadrant background
       if (quadrants.includes(overId as Quadrant)) {
         moveToQuadrant(active.id as string, overId as Quadrant)
+      } else if (overId === "unassigned") {
+        moveToQuadrant(active.id as string, null)
+      } else if (statuses.includes(overId)) {
+        updateStatus(active.id as string, overId as any)
       } else {
-        // If dropped onto another task, reorder and sync quadrant
+        // If dropped onto another task, reorder and sync quadrant/status
         reorderTask(active.id as string, overId)
       }
     },
-    [moveToQuadrant, reorderTask]
+    [moveToQuadrant, updateStatus, reorderTask]
   )
 
   const isMatrix = view === "matrix"

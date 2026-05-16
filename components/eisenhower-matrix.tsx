@@ -131,7 +131,10 @@ function DraggableSidebarTask({ task }: DraggableSidebarTaskProps) {
 export function EisenhowerMatrix() {
   const { tasks, autoSortTasks, settings } = useTasks()
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [sidebarFilter, setSidebarFilter] = useState<"all" | "unassigned" | Priority>("unassigned")
+
+  const { setNodeRef: setUnassignedRef, isOver: isUnassignedOver } = useDroppable({
+    id: "unassigned",
+  })
 
   const tasksByQuadrant = useMemo(() => {
     const grouped: Record<string, Task[]> = {
@@ -152,17 +155,11 @@ export function EisenhowerMatrix() {
     return grouped
   }, [tasks])
 
-  const sidebarTasks = useMemo(() => {
-    let filtered = tasks.filter((t) => !settings.showCompletedTasks ? t.status !== "done" : true)
-    
-    if (sidebarFilter === "unassigned") {
-      filtered = filtered.filter((t) => !t.quadrant)
-    } else if (sidebarFilter !== "all") {
-      filtered = filtered.filter((t) => t.priority === sidebarFilter)
-    }
-    
-    return filtered
-  }, [tasks, sidebarFilter])
+  const unassignedTasks = useMemo(() => {
+    return tasks.filter((t) => 
+      (!settings.showCompletedTasks ? t.status !== "done" : true) && !t.quadrant
+    )
+  }, [tasks, settings.showCompletedTasks])
 
   const unassignedCount = useMemo(
     () => tasks.filter((t) => !t.quadrant && (!settings.showCompletedTasks ? t.status !== "done" : true)).length,
@@ -245,41 +242,29 @@ export function EisenhowerMatrix() {
           >
             <div className="w-[280px] h-full rounded-xl glass-panel bg-card p-4">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-medium text-foreground">Tasks</h3>
-                <Select
-                  value={sidebarFilter}
-                  onValueChange={(v) => setSidebarFilter(v as typeof sidebarFilter)}
-                >
-                  <SelectTrigger className="w-auto h-7 text-xs bg-secondary border-border">
-                    <Filter className="w-3 h-3 mr-1" />
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-secondary border-border">
-                    <SelectItem value="unassigned">Unassigned ({unassignedCount})</SelectItem>
-                    <SelectItem value="all">All Tasks</SelectItem>
-                    <SelectItem value="urgent">Urgent</SelectItem>
-                    <SelectItem value="high">High Priority</SelectItem>
-                    <SelectItem value="medium">Medium Priority</SelectItem>
-                    <SelectItem value="low">Low Priority</SelectItem>
-                  </SelectContent>
-                </Select>
+                <h3 className="text-sm font-medium text-foreground">
+                  Unassigned ({unassignedCount})
+                </h3>
               </div>
 
-              <div className="space-y-2 max-h-[calc(100vh-300px)] overflow-y-auto pr-1">
-                {sidebarTasks.length === 0 ? (
+              <div 
+                ref={setUnassignedRef}
+                className={`space-y-2 min-h-[100px] max-h-[calc(100vh-300px)] overflow-y-auto pr-1 p-2 rounded-lg transition-colors ${
+                  isUnassignedOver ? "bg-secondary/50 ring-2 ring-foreground/20" : ""
+                }`}
+              >
+                {unassignedTasks.length === 0 ? (
                   <div className="text-center text-sm text-muted-foreground py-8">
-                    {sidebarFilter === "unassigned" 
-                      ? "All tasks are assigned to quadrants" 
-                      : "No tasks match this filter"}
+                    All tasks are assigned to quadrants
                   </div>
                 ) : (
-                  sidebarTasks.map((task) => (
+                  unassignedTasks.map((task) => (
                     <DraggableSidebarTask key={task.id} task={task} />
                   ))
                 )}
               </div>
 
-              {sidebarFilter === "unassigned" && unassignedCount > 0 && (
+              {unassignedCount > 0 && (
                 <div className="mt-4 pt-4 border-t border-border">
                   <Button
                     variant="outline"

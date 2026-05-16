@@ -414,6 +414,12 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         }
         activeTask.updatedAt = new Date()
       }
+
+      // Update status if moving to a different status column
+      if (activeTask.status !== overTask.status) {
+        activeTask.status = overTask.status
+        activeTask.updatedAt = new Date()
+      }
       
       // Insert at the new index (which might have shifted due to the splice)
       const newOverIndex = newTasks.findIndex((t) => t.id === overId)
