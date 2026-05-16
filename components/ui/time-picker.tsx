@@ -13,6 +13,10 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
   const [hour, setHour] = React.useState("12")
   const [minute, setMinute] = React.useState("00")
   const [ampm, setAmpm] = React.useState<"AM" | "PM">("AM")
+  const [isOpen, setIsOpen] = React.useState(false)
+
+  const hourRef = React.useRef<HTMLButtonElement | null>(null)
+  const minuteRef = React.useRef<HTMLButtonElement | null>(null)
 
   React.useEffect(() => {
     if (value) {
@@ -30,6 +34,15 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
     }
   }, [value])
 
+  React.useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => {
+        hourRef.current?.scrollIntoView({ block: "center" })
+        minuteRef.current?.scrollIntoView({ block: "center" })
+      }, 0)
+    }
+  }, [isOpen])
+
   const handleApply = (h: string, m: string, ap: string) => {
     let hourNum = parseInt(h, 10)
     if (ap === "PM" && hourNum < 12) hourNum += 12
@@ -41,7 +54,7 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
   const displayTime = value ? `${hour}:${minute} ${ampm}` : "Select time"
 
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -58,12 +71,13 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
           {/* Hours */}
           <div className="flex flex-col gap-1">
             <span className="text-xs text-muted-foreground text-center mb-1">Hour</span>
-            <div className="h-40 overflow-y-auto scrollbar-hide flex flex-col gap-1 pr-1">
+            <div className="h-40 overflow-y-auto flex flex-col gap-1 pr-1">
               {Array.from({ length: 12 }, (_, i) => i + 1).map((h) => {
                 const str = h.toString().padStart(2, "0")
                 return (
                   <Button
                     key={str}
+                    ref={hour === str ? hourRef : null}
                     variant={hour === str ? "default" : "ghost"}
                     size="sm"
                     className={cn(
@@ -84,11 +98,12 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
           {/* Minutes */}
           <div className="flex flex-col gap-1">
             <span className="text-xs text-muted-foreground text-center mb-1">Min</span>
-            <div className="h-40 overflow-y-auto scrollbar-hide flex flex-col gap-1 pr-1">
-              {["00", "05", "10", "15", "20", "30", "40", "45", "50", "55"].map((m) => {
+            <div className="h-40 overflow-y-auto flex flex-col gap-1 pr-1">
+              {["00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"].map((m) => {
                 return (
                   <Button
                     key={m}
+                    ref={minute === m ? minuteRef : null}
                     variant={minute === m ? "default" : "ghost"}
                     size="sm"
                     className={cn(
