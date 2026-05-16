@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Settings, Bell, Calendar, Trash2, Download, Grid2x2, Eye, Clock, Flag, Zap, Volume2 } from "lucide-react"
+import { Settings, Bell, Calendar, Trash2, Download, Grid2x2, Eye, Clock, Flag, Zap, Volume2, Pencil, Check } from "lucide-react"
 import { useTasks } from "@/lib/task-context"
 import { useGoogleLogin } from "@react-oauth/google"
 import type { Priority, ViewType } from "@/lib/types"
@@ -41,6 +41,8 @@ import {
 export function SettingsPanel() {
   const { tasks, settings, updateSettings, autoSortTasks } = useTasks()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [editingPriority, setEditingPriority] = useState<Priority | null>(null)
+  const [tempLabel, setTempLabel] = useState("")
 
   const googleLogin = useGoogleLogin({
     onSuccess: (tokenResponse) => {
@@ -186,22 +188,67 @@ export function SettingsPanel() {
 
             <div className="h-px bg-[rgba(120,112,100,0.15)]" />
 
-            {/* ---- Priority Colors ---- */}
+            {/* ---- Priority Options ---- */}
             <section className="space-y-3">
               <h3 className="text-sm font-medium text-foreground flex items-center gap-2">
                 <Flag className="w-4 h-4 text-muted-foreground" />
-                Priority Colors
+                Priority Options
               </h3>
               <div className="space-y-3 pl-6">
                 {(Object.keys(PRIORITY_INFO) as Priority[]).map((priority) => {
                   const info = getPriorityInfo(priority, settings)
+                  const isEditing = editingPriority === priority
+
                   return (
                     <div key={priority} className="flex items-center justify-between">
-                      <label className="text-sm text-muted-foreground capitalize">{info.label}</label>
+                      <div className="flex items-center gap-2 flex-1">
+                        {isEditing ? (
+                          <form
+                            onSubmit={(e) => {
+                              e.preventDefault()
+                              updateSettings({
+                                customPriorityLabels: {
+                                  ...(settings.customPriorityLabels || {}),
+                                  [priority]: tempLabel.trim() || info.label,
+                                },
+                              })
+                              setEditingPriority(null)
+                            }}
+                            className="flex items-center gap-2 flex-1"
+                          >
+                            <input
+                              type="text"
+                              value={tempLabel}
+                              onChange={(e) => setTempLabel(e.target.value)}
+                              className="bg-secondary border border-border rounded px-2 py-0.5 text-sm flex-1 max-w-[150px] focus:outline-none focus:ring-1 focus:ring-foreground"
+                              autoFocus
+                            />
+                            <button
+                              type="submit"
+                              className="text-muted-foreground hover:text-foreground"
+                            >
+                              <Check className="w-3.5 h-3.5" />
+                            </button>
+                          </form>
+                        ) : (
+                          <>
+                            <label className="text-sm text-muted-foreground capitalize">{info.label}</label>
+                            <button
+                              onClick={() => {
+                                setEditingPriority(priority)
+                                setTempLabel(info.label)
+                              }}
+                              className="text-muted-foreground/50 hover:text-foreground transition-colors"
+                            >
+                              <Pencil className="w-3 h-3" />
+                            </button>
+                          </>
+                        )}
+                      </div>
                       <Popover>
                         <PopoverTrigger asChild>
                           <button
-                            className={`w-5 h-5 rounded-full flex-shrink-0 ring-2 ring-offset-1 ring-foreground ${info.color}`}
+                            className={`w-5 h-5 rounded-full flex-shrink-0 ring-2 ring-offset-1 ring-foreground ml-4 ${info.color}`}
                             aria-label={`Select ${info.label} priority color`}
                           />
                         </PopoverTrigger>

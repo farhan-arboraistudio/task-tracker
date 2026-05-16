@@ -54,6 +54,7 @@ export interface Settings {
   showCompletedTasks: boolean
   compactMode: boolean
   customPriorityColors?: Partial<Record<Priority, string>>
+  customPriorityLabels?: Partial<Record<Priority, string>>
 }
 
 export interface ParsedTask {
@@ -134,10 +135,10 @@ export const PRIORITY_COLOR_OPTIONS = [
 
 export function getPriorityInfo(priority: Priority, settings?: Settings) {
   const defaultInfo = PRIORITY_INFO[priority]
-  if (settings?.customPriorityColors?.[priority]) {
-    return { ...defaultInfo, color: settings.customPriorityColors[priority] }
-  }
-  return defaultInfo
+  const color = settings?.customPriorityColors?.[priority] || defaultInfo.color
+  const label = settings?.customPriorityLabels?.[priority] || defaultInfo.label
+  
+  return { ...defaultInfo, color, label }
 }
 
 export function getQuadrantInfo(quadrant: Quadrant, settings?: Settings) {
